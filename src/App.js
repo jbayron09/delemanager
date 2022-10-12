@@ -1,12 +1,10 @@
 import './App.css';
-import {Button} from "./components/main/Button";
+import {Header} from "components/main/Header";
 
 function App() {
     return (
         <div className="App">
-            <Button fullWidth>
-                consult
-            </Button>
+            <Header/>
         </div>
     );
 }

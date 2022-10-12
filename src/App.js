@@ -1,10 +1,9 @@
-import './App.css';
-import {Header} from "components/main/Header";
+import LoginForm from "components/auth/LoginForm";
 
 function App() {
     return (
         <div className="App">
-            <Header/>
+          <LoginForm/>
         </div>
     );
 }

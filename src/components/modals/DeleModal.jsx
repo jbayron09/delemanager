@@ -1,6 +1,6 @@
 import {Button} from "components/main/Button";
 
-const ModalSms = () => {
+const DeleModal = () => {
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div className="bg-white flex flex-col items-center m-10 py-12 px-14 rounded-lg shadow-2xl">
@@ -19,4 +19,4 @@ const ModalSms = () => {
     )
 }
 
-export default ModalSms
+export default DeleModal

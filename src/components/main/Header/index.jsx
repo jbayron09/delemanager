@@ -4,7 +4,7 @@ import {HeaderBtn} from "components/main/Header/components/HeaderBtn";
 
 export function Header(){
     return (
-        <header className="w-full flex justify-between items-center">
+        <header className="w-full flex justify-between items-center bg-white">
             <HeaderBtn>
                 <BiMenuAltLeft/>
             </HeaderBtn>

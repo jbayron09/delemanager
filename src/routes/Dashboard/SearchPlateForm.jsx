@@ -1,23 +1,21 @@
-import {Button} from "components/main/Button";
 import {useState} from "react";
+import Button from "components/main/Button";
 
-export function SearchPlateForm() {
+export default function SearchPlateForm() {
     const [inputValue, setInputValue] = useState('')
-    const [deleteKey, setDeleteKey] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
-    const handleKeyDelete = (e) => e.key === 'Backspace' && setDeleteKey(true)
+    const handleKeyDelete = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
-    const handleInputValue = (e) => {
-        if (e.target.value.length <= 7) {
-            if (deleteKey === true && e.target.value.length === 3) {
-                setInputValue(e.target.value.substring(0, 2))
+    const handleInputValue = ({target: {value}}) => {
+        if (value.length <= 7) {
+            if (isDeleting && value.length === 3) {
+                setInputValue(value.substring(0, 2))
             } else {
-                let vehiclePlate = e.target.value.toUpperCase()
-                if (e.target.value.length === 3) {
+                setIsDeleting(false)
+                let vehiclePlate = value.toUpperCase()
+                if (value.length === 3)
                     vehiclePlate = vehiclePlate + ' '
-                }
-                if (e.target.value.length <= 2) {
-                }
                 setInputValue(vehiclePlate)
             }
         }

@@ -1,7 +1,7 @@
-import {Header} from "components/main/Header";
-import {SearchPlateForm} from "routes/Dashboard/SearchPlateForm";
+import Header from "components/main/Header";
+import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 
-export function Dashboard(){
+export default function Dashboard(){
     return (
         <>
             <Header/>

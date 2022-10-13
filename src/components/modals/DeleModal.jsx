@@ -1,6 +1,6 @@
-import {Button} from "components/main/Button";
 import Modal from 'react-modal';
 import PropTypes from "prop-types";
+import Button from "components/main/Button";
 
 export default function DeleModal({isOpen, toggle}) {
     return (

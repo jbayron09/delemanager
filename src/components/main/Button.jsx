@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
-export function Button({children, fullWidth, ...rest}) {
+export default function Button({children, fullWidth, ...rest}) {
     return (
         <button
             className={classNames([

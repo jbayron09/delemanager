@@ -1,11 +1,9 @@
-// import LoginForm from "components/auth/LoginForm";
-import DeleModal from "components/modals/DeleModal";
+import LoginForm from "components/auth/LoginForm";
 
 function App() {
     return (
         <div className="App">
-            {/*<LoginForm/>*/}
-            <DeleModal/>
+            <LoginForm/>
         </div>
     );
 }

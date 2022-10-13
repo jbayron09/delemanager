@@ -1,5 +1,5 @@
 import {Header} from "components/main/Header";
-import {SearchPlateForm} from "components/routes/Dashboard/SearchPlateForm";
+import {SearchPlateForm} from "routes/Dashboard/SearchPlateForm";
 
 export function Dashboard(){
     return (

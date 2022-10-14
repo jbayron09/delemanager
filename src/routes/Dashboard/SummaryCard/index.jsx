@@ -1,12 +1,10 @@
 import {BiTime, BiDollarCircle} from "react-icons/bi";
 import Button from "components/main/Button";
 import SummaryCardSection from "routes/Dashboard/SummaryCard/components/SummaryCardSection";
-import {DateTime} from "luxon";
+
+import CounterTime from "routes/Dashboard/SummaryCard/components/CounterTime";
 
 export default function SummaryCard() {
-    const date1 = DateTime.now()
-    const date2 = DateTime.fromISO("2022-10-14T07:00:00")
-    const diff = date1.diff(date2, ["months", "days", "hours", "minutes","seconds"]).toObject()
 
     return (
         <div className="bg-white rounded-lg">
@@ -15,7 +13,7 @@ export default function SummaryCard() {
                     icon={BiTime}
                     className="mb-2">
                     {/*Aún no está contando el tiempo*/}
-                    {diff.hours + " hora, " + diff.minutes + " minutos, " + Math.ceil(diff.seconds) + " segundos"}
+                    <CounterTime/>
                 </SummaryCardSection>
                 <SummaryCardSection icon={BiDollarCircle}>
                     $0

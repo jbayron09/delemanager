@@ -34,17 +34,17 @@ export default function SearchPlateForm({onSearch, onClear}) {
     return (
         <form className="relative flex flex-col"
               onSubmit={e => {
-                    e.preventDefault()
-                    if(inputValue.length===7) {
-                        setShowMessage(false)
-                        onSearch(inputValue)
-                        setShowButtonDelete(true)
-                    } else{
-                        setShowButtonDelete(false)
-                        setShowMessage(true)
-                        onClear()
-                    }
-                }}>
+                  e.preventDefault()
+                  if (inputValue.length === 7) {
+                      setShowMessage(false)
+                      onSearch(inputValue)
+                      setShowButtonDelete(true)
+                  } else {
+                      setShowButtonDelete(false)
+                      setShowMessage(true)
+                      onClear()
+                  }
+              }}>
             <input
                 className="rounded-md text-center text-6xl text-gray-800 font-bold mb-3 placeholder:text-gray-200 border-gray-100"
                 type="text"

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import {ReactComponent as DeleLogo} from './logo.svg';
 
-export function Logo({size}) {
+export default  function Logo({size}) {
     let height
 
     switch (size) {

@@ -1,8 +1,8 @@
-import {Logo} from "components/main/Logo";
 import {BiMenuAltLeft, BiUser} from "react-icons/bi";
-import {HeaderBtn} from "components/main/Header/components/HeaderBtn";
+import Logo from "components/main/Logo";
+import HeaderBtn from "components/main/Header/components/HeaderBtn";
 
-export function Header(){
+export default function Header(){
     return (
         <header className="w-full flex justify-between items-center bg-white">
             <HeaderBtn>

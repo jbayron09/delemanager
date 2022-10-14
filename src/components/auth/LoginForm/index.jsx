@@ -1,5 +1,5 @@
-import {Logo} from "components/main/Logo";
-import {Button} from "components/main/Button";
+import Logo from "components/main/Logo";
+import Button from "components/main/Button";
 
 export const LoginForm = () => {
     return (

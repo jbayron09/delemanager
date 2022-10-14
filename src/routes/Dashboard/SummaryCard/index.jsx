@@ -1,5 +1,5 @@
 import {BiTime, BiDollarCircle} from "react-icons/bi";
-import {Button} from "components/main/Button";
+import Button from "components/main/Button";
 import SummaryCardSection from "routes/Dashboard/SummaryCard/components/SummaryCardSection";
 
 export default function SummaryCard() {

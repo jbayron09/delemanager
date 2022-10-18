@@ -16,7 +16,9 @@ export default function CounterTime() {
         return () => clearTimeout(timeout)
     }, [calculateDiff])
 
-    return(<div>
-        <Fraction diff={diff}/>
+    return (<div>
+        <Fraction value={diff.hours} label='hora'/>
+        <Fraction value={diff.minutes} label='minuto'/>
+        <Fraction value={diff.seconds} label='segundo'/>
     </div>)
 }

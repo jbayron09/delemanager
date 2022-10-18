@@ -19,5 +19,5 @@ export default function PlateDeleteBtn({className, onClick}) {
 
 PlateDeleteBtn.propTypes = {
     className: PropTypes.string,
-    onClear: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
 }

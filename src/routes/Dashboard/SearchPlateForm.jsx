@@ -1,4 +1,5 @@
 import {useState} from "react";
+import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 
@@ -64,4 +65,9 @@ export default function SearchPlateForm({onSearch, onClear}) {
             }
         </form>
     )
+}
+
+SearchPlateForm.propTypes = {
+    onSearch: PropTypes.func.isRequired,
+    onClear: PropTypes.func.isRequired,
 }

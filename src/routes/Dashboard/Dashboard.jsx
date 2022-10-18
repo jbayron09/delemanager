@@ -1,14 +1,12 @@
+import {useState} from "react";
 import Header from "components/main/Header";
 import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 import SummaryCard from "routes/Dashboard/SummaryCard";
-import {useState} from "react";
 
 export default function Dashboard(){
     const [showSummary, setShowSummary] = useState(false)
 
-    const handleSearchPlate = () => {
-        setShowSummary(true)
-    }
+    const handleSearchPlate = () => setShowSummary(true)
 
     const onClear = () => setShowSummary(false)
 

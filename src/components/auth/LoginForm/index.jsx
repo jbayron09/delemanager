@@ -23,23 +23,7 @@ export const LoginForm = () => {
         })
         console.log(response.json());
     }
-    // useEffect( () => {
-    //     const login = async () => {
-    //         const data = {
-    //             "identifier": "jatmolina15@gmail.com",
-    //             "password": "delejatmolina15dele"
-    //         }
-    //         const response = await fetch("https://api.deledele.app/api/auth/local", {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(data),
-    //         })
-    //         console.log(response.json());
-    //     }
-    //     login()
-    // },[])
+
     return (
         <div className="bg-gray-50 w-full h-full flex justify-center items-center">
             <div className="bg-white shadow-2xl w-full mx-8 p-8">

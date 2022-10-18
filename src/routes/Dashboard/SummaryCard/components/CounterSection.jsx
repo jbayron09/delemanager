@@ -7,8 +7,8 @@ export default function CounterSection({value, label, addComma}) {
 }
 
 CounterSection.propTypes = {
-    label: PropTypes.oneOf(['dia', 'hora', 'minuto', 'segundo']),
-    value: PropTypes.number,
+    label: PropTypes.oneOf(['dia', 'hora', 'minuto', 'segundo']).isRequired,
+    value: PropTypes.number.isRequired,
     addComma: PropTypes.bool
 }
 

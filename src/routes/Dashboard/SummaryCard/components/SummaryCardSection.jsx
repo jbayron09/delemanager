@@ -12,7 +12,7 @@ export default function SummaryCardSection({icon, className, children}) {
                     className: 'text-gray-300 mr-2'
                 })
             }
-            <div className="font-bold text-gray-700">{children}</div>
+            <p className="font-bold text-gray-700">{children}</p>
         </div>
     )
 }

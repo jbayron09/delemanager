@@ -1,6 +1,6 @@
 import {DateTime} from "luxon";
 import {useCallback, useEffect, useState} from "react";
-import Fraction from "routes/Dashboard/SummaryCard/components/Fraction";
+import CounterSection from "routes/Dashboard/SummaryCard/components/CounterSection";
 
 export default function CounterTime() {
     const [diff, setDiff] = useState({})
@@ -16,9 +16,11 @@ export default function CounterTime() {
         return () => clearTimeout(timeout)
     }, [calculateDiff])
 
-    return (<div>
-        <Fraction value={diff.hours} label='hora'/>
-        <Fraction value={diff.minutes} label='minuto'/>
-        <Fraction value={diff.seconds} label='segundo'/>
-    </div>)
+    return (
+        <span>
+            <CounterSection value={diff.hours} label="hora" addComma/>
+            <CounterSection value={diff.minutes} label="minuto" addComma/>
+            <CounterSection value={diff.seconds} label="segundo"/>
+        </span>
+    )
 }

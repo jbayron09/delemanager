@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import Logo from "components/main/Logo";
 import Button from "components/main/Button";
 
@@ -6,22 +7,25 @@ export const LoginForm = () => {
     const [userInputValue,setUserInputValue] = useState('')
     const [passwordInputValue,setPasswordInputValue] = useState('')
 
+    let navigate = useNavigate()
+
     const userChanged = e => setUserInputValue(e.target.value)
     const passwordChanged = e => setPasswordInputValue(e.target.value)
 
     const login = async () => {
+        console.log(typeof(userInputValue));
+        console.log(passwordInputValue);
         const data = {
             "identifier": userInputValue,
-            "password": passwordInputValue
+            "password": passwordInputValue,
         }
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/local`, {
+        return await fetch(`${process.env.REACT_APP_API_URL}/api/auth/local`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         })
-        console.log(response.json());
     }
 
     return (
@@ -30,7 +34,13 @@ export const LoginForm = () => {
                 <form className="flex flex-col" onSubmit={
                     e => {
                         e.preventDefault()
-                        login()
+                        console.log('submit')
+                        login().then(response => response.json())
+                            .then(data => {
+                                if(data.jwt){
+                                    return navigate("/dashboard")
+                                }
+                            });
                     }
                 }>
                     <div className="flex justify-center mb-8">

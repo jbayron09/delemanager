@@ -1,13 +1,14 @@
 import {DateTime} from "luxon";
 import {useCallback, useEffect, useState} from "react";
 import CounterSection from "routes/Dashboard/SummaryCard/components/CounterSection";
+import PropTypes from "prop-types";
 
-export default function CounterTime() {
+export default function CounterTime({datetime}) {
     const [diff, setDiff] = useState({})
     const calculateDiff = useCallback(() => {
-        const date1 = DateTime.now()
-        const date2 = DateTime.fromISO("2022-10-16T15:00:00")
-        setDiff(date1.diff(date2, ["months", "days", "hours", "minutes", "seconds"]).toObject())
+        const now = DateTime.now()
+        const checkInDate = DateTime.fromISO(datetime)
+        setDiff(now.diff(checkInDate, ["months", "days", "hours", "minutes", "seconds"]).toObject())
     })
 
     useEffect(() => {
@@ -24,3 +25,8 @@ export default function CounterTime() {
         </span>
     )
 }
+
+CounterTime.propTypes = {
+    datetime: PropTypes.string.isRequired
+}
+

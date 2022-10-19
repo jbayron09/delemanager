@@ -1,11 +1,13 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import Logo from "components/main/Logo";
 import Button from "components/main/Button";
+import {AuthContext} from "providers/AuthProvider";
 
 export const LoginForm = () => {
     const [userInputValue,setUserInputValue] = useState('jatmolina15@gmail.com')
     const [passwordInputValue,setPasswordInputValue] = useState('delejatmolina15dele')
+    const {setIsAuthenticated} = useContext(AuthContext)
 
     let navigate = useNavigate()
 
@@ -39,6 +41,7 @@ export const LoginForm = () => {
                             .then(data => {
                                 if(data.jwt){
                                     localStorage.setItem('token', data.jwt)
+                                    setIsAuthenticated(true)
                                     return navigate("/dashboard")
                                 }
                                 return navigate("/auth/login")

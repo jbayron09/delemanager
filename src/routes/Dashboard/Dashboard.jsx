@@ -2,19 +2,15 @@ import {useState} from "react";
 import Header from "components/main/Header";
 import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 import SummaryCard from "routes/Dashboard/SummaryCard";
-import {Navigate} from "react-router-dom";
-import useAuth from "hooks/auth/useAuth";
 
 export default function Dashboard(){
     const [showSummary, setShowSummary] = useState(false)
-    const {isAuthenticated} = useAuth()
 
     const handleSearchPlate = () => setShowSummary(true)
 
     const onClear = () => setShowSummary(false)
 
     return (
-        isAuthenticated ?
         <>
             <Header/>
             <div className="px-4">
@@ -27,6 +23,6 @@ export default function Dashboard(){
                 </div>
                 {showSummary && <SummaryCard />}
             </div>
-        </> : <Navigate to="/" />
+        </>
     )
 }

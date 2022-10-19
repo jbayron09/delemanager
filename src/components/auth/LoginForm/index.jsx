@@ -4,8 +4,8 @@ import Logo from "components/main/Logo";
 import Button from "components/main/Button";
 
 export const LoginForm = () => {
-    const [userInputValue,setUserInputValue] = useState('')
-    const [passwordInputValue,setPasswordInputValue] = useState('')
+    const [userInputValue,setUserInputValue] = useState('jatmolina15@gmail.com')
+    const [passwordInputValue,setPasswordInputValue] = useState('delejatmolina15dele')
 
     let navigate = useNavigate()
 
@@ -38,8 +38,10 @@ export const LoginForm = () => {
                         login().then(response => response.json())
                             .then(data => {
                                 if(data.jwt){
+                                    localStorage.setItem('token', data.jwt)
                                     return navigate("/dashboard")
                                 }
+                                return navigate("/auth/login")
                             });
                     }
                 }>

@@ -1,10 +1,11 @@
 import {createContext, useState} from "react";
 import PropTypes from "prop-types";
+import {LOCAL_STORAGE_AUTH_TOKEN_KEY} from "hooks/auth/useAuth";
 
 export const AuthContext = createContext({})
 
 export default function AuthProvider({children}){
-    const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('token') !== null)
+    const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY) !== null)
 
     return (
         <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>

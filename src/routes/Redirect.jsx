@@ -1,9 +1,7 @@
 import {Navigate} from "react-router-dom";
-import {useContext} from "react";
-import {AuthContext} from "providers/AuthProvider";
+import useAuth from "hooks/auth/useAuth";
 
 export default function Redirect() {
-    if (useContext(AuthContext).isAuthenticated)
-        return <Navigate to="/dashboard" />
-    return <Navigate to="/auth/login" />
+    const {isAuthenticated} = useAuth()
+    return <Navigate to={isAuthenticated ? "/dashboard" : "/auth/login"} />
 }

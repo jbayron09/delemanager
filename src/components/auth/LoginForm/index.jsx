@@ -1,53 +1,42 @@
-import {useContext, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 import Logo from "components/main/Logo";
 import Button from "components/main/Button";
-import {AuthContext} from "providers/AuthProvider";
+import useAuth from "hooks/auth/useAuth";
 
 export const LoginForm = () => {
-    const [userInputValue,setUserInputValue] = useState('jatmolina15@gmail.com')
-    const [passwordInputValue,setPasswordInputValue] = useState('delejatmolina15dele')
-    const {setIsAuthenticated} = useContext(AuthContext)
-
-    let navigate = useNavigate()
+    const {login} = useAuth()
+    const [userInputValue, setUserInputValue] = useState('jatmolina15@gmail.com')
+    const [passwordInputValue, setPasswordInputValue] = useState('delejatmolina15dele')
 
     const userChanged = e => setUserInputValue(e.target.value)
     const passwordChanged = e => setPasswordInputValue(e.target.value)
 
-    const login = async () => {
-        console.log(typeof(userInputValue));
-        console.log(passwordInputValue);
-        const data = {
-            "identifier": userInputValue,
-            "password": passwordInputValue,
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const body = {
+                "identifier": userInputValue,
+                "password": passwordInputValue,
+            }
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/local`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            })
+            const data = await response.json()
+            login(data.jwt)
+        } catch (error) {
+            // TODO show error message
+            console.log(error);
         }
-        return await fetch(`${process.env.REACT_APP_API_URL}/api/auth/local`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
     }
 
     return (
         <div className="bg-gray-50 w-full h-full flex justify-center items-center">
             <div className="bg-white shadow-2xl w-full mx-8 p-8">
-                <form className="flex flex-col" onSubmit={
-                    e => {
-                        e.preventDefault()
-                        console.log('submit')
-                        login().then(response => response.json())
-                            .then(data => {
-                                if(data.jwt){
-                                    localStorage.setItem('token', data.jwt)
-                                    setIsAuthenticated(true)
-                                    return navigate("/dashboard")
-                                }
-                                return navigate("/auth/login")
-                            });
-                    }
-                }>
+                <form className="flex flex-col" onSubmit={handleSubmit}>
                     <div className="flex justify-center mb-8">
                         <Logo size={'md'}/>
                     </div>

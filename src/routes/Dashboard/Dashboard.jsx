@@ -1,19 +1,18 @@
-import {useContext, useState} from "react";
+import {useState} from "react";
 import Header from "components/main/Header";
 import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 import SummaryCard from "routes/Dashboard/SummaryCard";
-import {AuthContext} from "providers/AuthProvider";
 import {Navigate} from "react-router-dom";
+import useAuth from "hooks/auth/useAuth";
 
 export default function Dashboard(){
     const [showSummary, setShowSummary] = useState(false)
-    const {isAuthenticated} = useContext(AuthContext)
+    const {isAuthenticated} = useAuth()
 
     const handleSearchPlate = () => setShowSummary(true)
 
     const onClear = () => setShowSummary(false)
 
-    console.log(useContext(AuthContext))
     return (
         isAuthenticated ?
         <>

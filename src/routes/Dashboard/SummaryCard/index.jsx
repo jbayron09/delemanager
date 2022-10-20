@@ -10,17 +10,19 @@ export default function SummaryCard() {
     const [showModal, setShowModal] = useState(false)
     const [counterIsActive, setCounterIsActive] = useState(false)
 
-    const datetime = "2022-10-20T10:25:00"
-    const startCounter = () => setCounterIsActive(true)
-
-    const printInvoice = () => {
-        const now = DateTime.now()
-        const checkInDate = DateTime.fromISO(datetime)
-        const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
-        if (minutes < 5)
-            setShowModal(true)
-    }
+    const datetime = "2022-10-20T11:36:00"
     const closeModal = () => setShowModal(false)
+
+    const handleClick = () => {
+        setCounterIsActive(true)
+        if (counterIsActive){
+            const now = DateTime.now()
+            const checkInDate = DateTime.fromISO(datetime)
+            const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
+            if (minutes < 5)
+                setShowModal(true)
+        }
+    }
 
     return (
         <div className="bg-white rounded-lg">
@@ -41,21 +43,17 @@ export default function SummaryCard() {
                 </SummaryCardSection>
             </div>
             <div>
-                {
-                    !counterIsActive
-                        ?
-                        <Button
-                            fullWidth
-                            onClick={startCounter}>
-                            Comenzar conteo
-                        </Button>
-                        :
-                        <Button
-                            fullWidth
-                            onClick={printInvoice}>
-                            Imprimir factura
-                        </Button>
-                }
+                <Button
+                    fullWidth
+                    onClick={handleClick}>
+                    {
+                        counterIsActive
+                            ?
+                            "Imprimir factura"
+                            :
+                            "Comenzar conteo"
+                    }
+                </Button>
                 <DeleModal isOpen={showModal}
                            toggle={closeModal}/>
             </div>

@@ -11,15 +11,14 @@ export default function SummaryCard() {
     const [counterIsActive, setCounterIsActive] = useState(false)
 
     const datetime = "2022-10-20T10:25:00"
-    const startCounter = () => setCounterIsActive(true);
+    const startCounter = () => setCounterIsActive(true)
 
     const printInvoice = () => {
         const now = DateTime.now()
         const checkInDate = DateTime.fromISO(datetime)
         const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
-        if (minutes < 5) {
+        if (minutes < 5)
             setShowModal(true)
-        }
     }
     const closeModal = () => setShowModal(false)
 

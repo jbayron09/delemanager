@@ -10,18 +10,17 @@ export default function SummaryCard() {
     const [showModal, setShowModal] = useState(false)
     const [counterIsActive, setCounterIsActive] = useState(false)
 
-    const datetime = "2022-10-20T11:36:00"
+    const datetime = "2022-10-20T15:25:00"
     const closeModal = () => setShowModal(false)
 
     const handleClick = () => {
-        setCounterIsActive(true)
         if (counterIsActive){
             const now = DateTime.now()
             const checkInDate = DateTime.fromISO(datetime)
             const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
             if (minutes < 5)
                 setShowModal(true)
-        }
+        } else setCounterIsActive(true)
     }
 
     return (

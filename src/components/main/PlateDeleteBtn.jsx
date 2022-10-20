@@ -7,7 +7,7 @@ export default function PlateDeleteBtn({className, onClick}) {
         <button
             type="button"
             className={classNames([
-                "bg-red-500 text-xs text-white font-semibold flex items-center p-1 rounded-md uppercase",
+                "bg-red-500 text-xs text-white font-semibold flex items-center p-1 px-2 rounded-md uppercase",
                 className && className
             ])}
             onClick={onClick}>

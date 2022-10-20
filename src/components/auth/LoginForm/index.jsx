@@ -2,6 +2,7 @@ import {useState} from "react";
 import Logo from "components/main/Logo";
 import Button from "components/main/Button";
 import useAuth from "hooks/auth/useAuth";
+import ErrorMessage from "components/forms/ErrorMessage";
 
 export const LoginForm = () => {
     const {login} = useAuth()
@@ -28,14 +29,11 @@ export const LoginForm = () => {
                 body: JSON.stringify(body),
             })
             const data = await response.json()
-            console.log(data);
             if(data.error){
                 setShowErrorMessage(true)
                 setErrorMessage(data.error.message)
-
             } else
                 login(data.jwt)
-
         } catch (error) {
             // TODO show error message
             console.log(error);
@@ -66,7 +64,7 @@ export const LoginForm = () => {
                             placeholder="Contraseña"/>
                     </div>
                     {
-                        showErrorMessage && <p className="text-red-500 text-sm font-medium mb-4">{errorMessage}</p>
+                        showErrorMessage && <ErrorMessage message={errorMessage} className="mb-4"/>
                     }
                     <Button>
                         Ingresar

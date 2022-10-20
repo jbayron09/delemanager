@@ -5,8 +5,8 @@ import useAuth from "hooks/auth/useAuth";
 
 export const LoginForm = () => {
     const {login} = useAuth()
-    const [userInputValue, setUserInputValue] = useState('jatmolina15@gmail.com')
-    const [passwordInputValue, setPasswordInputValue] = useState('delejatmolina15dele')
+    const [userInputValue, setUserInputValue] = useState('')
+    const [passwordInputValue, setPasswordInputValue] = useState('')
 
     const userChanged = e => setUserInputValue(e.target.value)
     const passwordChanged = e => setPasswordInputValue(e.target.value)

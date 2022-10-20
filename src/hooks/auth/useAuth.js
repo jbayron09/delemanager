@@ -1,8 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "providers/AuthProvider";
-
-export const LOCAL_STORAGE_AUTH_TOKEN_KEY = 'token'
+import {LOCAL_STORAGE_AUTH_TOKEN_KEY} from "constants/localStorage";
 
 export default function useAuth(){
     const navigate = useNavigate()

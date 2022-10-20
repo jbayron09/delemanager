@@ -6,11 +6,11 @@ export default function Header(){
     return (
         <header className="w-full flex justify-between items-center bg-white">
             <HeaderBtn>
-                <BiMenuAltLeft/>
+                <BiMenuAltLeft size="1.5em"/>
             </HeaderBtn>
             <Logo height="sm"/>
             <HeaderBtn>
-                <BiUser/>
+                <BiUser size="1.5em"/>
             </HeaderBtn>
         </header>
     )

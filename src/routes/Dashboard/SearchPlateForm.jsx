@@ -2,6 +2,7 @@ import {useState} from "react";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
+import ErrorMessage from "components/forms/ErrorMessage";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
@@ -55,7 +56,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}/>
             {showButtonDelete && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
-            {showMessage && <p className="text-red-500 text-sm font-medium mb-3">Placa incorrecta</p>}
+            {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {!showButtonDelete &&
                 <Button
                     type="submit"

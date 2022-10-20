@@ -7,6 +7,8 @@ export const LoginForm = () => {
     const {login} = useAuth()
     const [userInputValue, setUserInputValue] = useState('')
     const [passwordInputValue, setPasswordInputValue] = useState('')
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const userChanged = e => setUserInputValue(e.target.value)
     const passwordChanged = e => setPasswordInputValue(e.target.value)
@@ -26,7 +28,14 @@ export const LoginForm = () => {
                 body: JSON.stringify(body),
             })
             const data = await response.json()
-            login(data.jwt)
+            console.log(data);
+            if(data.error){
+                setShowErrorMessage(true)
+                setErrorMessage(data.error.message)
+
+            } else
+                login(data.jwt)
+
         } catch (error) {
             // TODO show error message
             console.log(error);
@@ -56,6 +65,9 @@ export const LoginForm = () => {
                             className="w-full border-gray-100 rounded-md placeholder:text-gray-500"
                             placeholder="Contraseña"/>
                     </div>
+                    {
+                        showErrorMessage && <p className="text-red-500 text-sm font-medium mb-4">{errorMessage}</p>
+                    }
                     <Button>
                         Ingresar
                     </Button>

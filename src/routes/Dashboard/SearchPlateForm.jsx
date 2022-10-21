@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
+import {useMutation} from "@apollo/client";
+import CreateVehicleQuery from "queries/CreateVehicleQuery";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
@@ -34,20 +36,36 @@ export default function SearchPlateForm({onSearch, onClear}) {
         onClear()
     }
 
+    const [createVehicle, {loading, error, data}] = useMutation(CreateVehicleQuery);
+
+    if (loading) return <p>Loading...</p>;
+
+    if (error) return <p>Error :(</p>;
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if (inputValue.length === 7) {
+            setShowMessage(false)
+            createVehicle({
+                variables:{
+                    data: {
+                        plate: "VAS128"
+                    }
+                }
+            })
+            console.log(data);
+            onSearch(inputValue)
+            setShowButtonDelete(true)
+        } else {
+            setShowButtonDelete(false)
+            setShowMessage(true)
+            onClear()
+        }
+    }
+
     return (
         <form className="relative flex flex-col"
-              onSubmit={e => {
-                  e.preventDefault()
-                  if (inputValue.length === 7) {
-                      setShowMessage(false)
-                      onSearch(inputValue)
-                      setShowButtonDelete(true)
-                  } else {
-                      setShowButtonDelete(false)
-                      setShowMessage(true)
-                      onClear()
-                  }
-              }}>
+              onSubmit={handleSubmit}>
             <input
                 className="rounded-md text-center text-6xl text-gray-800 font-bold mb-3 placeholder:text-gray-200 border-gray-100"
                 type="text"

@@ -44,14 +44,14 @@ export default function SearchPlateForm({onSearch, onClear}) {
     // if (error) return <p>Error</p>;
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (inputValue.length === 7) {
             setShowMessage(false)
-            createVehicle({
+            await createVehicle({
                 variables: {
                     data: {
-                        // plate: "VER195"
+                        // plate: "VER198"
                         plate: inputValue.split(/\s+/).join('')
                     }
                 }

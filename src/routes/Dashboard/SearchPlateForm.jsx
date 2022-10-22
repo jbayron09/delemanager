@@ -36,26 +36,31 @@ export default function SearchPlateForm({onSearch, onClear}) {
         onClear()
     }
 
+
     const [createVehicle, {loading, error, data}] = useMutation(CreateVehicleQuery);
 
-    if (loading) return <p>Loading...</p>;
+    // if (loading) return <p>Loading...</p>;
+    //
+    // if (error) return <p>Error</p>;
 
-    if (error) return <p>Error :(</p>;
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if (inputValue.length === 7) {
             setShowMessage(false)
             createVehicle({
-                variables:{
+                variables: {
                     data: {
-                        plate: "VAS128"
+                        // plate: "VER195"
+                        plate: inputValue.split(/\s+/).join('')
                     }
                 }
             })
             console.log(data);
+            console.log(inputValue.split(/\s+/).join(''))
             onSearch(inputValue)
             setShowButtonDelete(true)
+
         } else {
             setShowButtonDelete(false)
             setShowMessage(true)
@@ -73,8 +78,12 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 value={inputValue}
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}/>
+
             {showButtonDelete && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
             {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
+            {loading && <ErrorMessage message="Submitting..." className="mb-3"/>}
+            {error && <ErrorMessage message={"Submission error! "+error.message} className="mb-3"/>}
+
             {!showButtonDelete &&
                 <Button
                     type="submit"

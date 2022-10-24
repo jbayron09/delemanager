@@ -72,14 +72,19 @@ export default function SearchPlateForm({onSearch, onClear}) {
 
             {showButtonDelete && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
             {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
-            {loading && <ErrorMessage message="Submitting..." className="mb-3"/>}
-            {error && <ErrorMessage message={"Submission error! " + error.message} className="mb-3"/>}
+            {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
 
             {!showButtonDelete &&
                 <Button
                     type="submit"
                     fullWidth>
-                    Buscar
+                    {
+                        loading
+                            ?
+                            "cargando..."
+                            :
+                            "Buscar"
+                    }
                 </Button>
             }
         </form>

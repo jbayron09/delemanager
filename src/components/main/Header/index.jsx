@@ -7,7 +7,6 @@ import DropDown from "routes/Dashboard/DropDown";
 export default function Header(){
     const dropDownRef = useRef(null);
     const [showProfile, setShowProfile] = useState(false)
-
     const handleMenu = () => {
         console.log('Menu')
     }

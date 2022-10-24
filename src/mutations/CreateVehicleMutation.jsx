@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-const CreateVehicleQuery = gql`
+const CreateVehicleMutation = gql`
   mutation CreateVehicle ($data: VehicleInput!) {
     createVehicle(data: $data) {
         data {       
@@ -13,4 +13,4 @@ const CreateVehicleQuery = gql`
 }
 `;
 
-export default CreateVehicleQuery
+export default CreateVehicleMutation

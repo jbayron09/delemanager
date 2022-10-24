@@ -4,7 +4,7 @@ import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
 import {useMutation} from "@apollo/client";
-import CreateVehicleQuery from "queries/CreateVehicleQuery";
+import CreateVehicleMutation from "mutations/CreateVehicleMutation";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
@@ -36,13 +36,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
         onClear()
     }
 
-
-    const [createVehicle, {loading, error, data}] = useMutation(CreateVehicleQuery);
-
-    // if (loading) return <p>Loading...</p>;
-    //
-    // if (error) return <p>Error</p>;
-
+    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -51,13 +45,10 @@ export default function SearchPlateForm({onSearch, onClear}) {
             await createVehicle({
                 variables: {
                     data: {
-                        // plate: "VER198"
                         plate: inputValue.split(/\s+/).join('')
                     }
                 }
             })
-            console.log(data);
-            console.log(inputValue.split(/\s+/).join(''))
             onSearch(inputValue)
             setShowButtonDelete(true)
 
@@ -82,7 +73,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
             {showButtonDelete && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
             {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {loading && <ErrorMessage message="Submitting..." className="mb-3"/>}
-            {error && <ErrorMessage message={"Submission error! "+error.message} className="mb-3"/>}
+            {error && <ErrorMessage message={"Submission error! " + error.message} className="mb-3"/>}
 
             {!showButtonDelete &&
                 <Button

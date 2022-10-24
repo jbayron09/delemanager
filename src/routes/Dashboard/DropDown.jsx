@@ -4,6 +4,10 @@ import classNames from "classnames";
 import onClickOutside from "utils/onClickOutside";
 
 export default function DropDown({setShowProfile, dropDownRef, className}) {
+    const links = [
+        { label: 'Mi perfil', href: '/dashboard'},
+        { label: 'Salir', href: '/auth/logout'}
+    ]
     const [listening, setListening] = useState(false);
 
     useEffect(onClickOutside(
@@ -20,14 +24,14 @@ export default function DropDown({setShowProfile, dropDownRef, className}) {
                 <p className="text-sm leading-5 font-normal text-gray-500">byroneldelamoto@gmail.com</p>
             </div>
             <div className="w-full">
-                <Link to="/dashboard"
-                      className="block text-sm font-normal text-gray-700 px-5 leading-10">
-                    Mi perfil
-                </Link>
-                <Link to="/auth/logout"
-                      className="block text-sm font-normal text-gray-700 px-5 leading-10">
-                    Salir
-                </Link>
+                {
+                    links.map(link =>
+                        <Link to={link.href}
+                              className="block text-sm font-normal text-gray-700 px-5 leading-10">
+                            {link.label}
+                        </Link>
+                    )
+                }
             </div>
         </div>
     )

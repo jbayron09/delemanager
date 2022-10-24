@@ -6,7 +6,7 @@ export default function Logout(){
 
     useEffect(() => {
         logout()
-    },[logout])
+    }, [logout])
 
     return null
 }

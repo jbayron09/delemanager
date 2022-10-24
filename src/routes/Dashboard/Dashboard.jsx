@@ -5,8 +5,9 @@ import SummaryCard from "routes/Dashboard/SummaryCard";
 
 export default function Dashboard(){
     const [showSummaryCard, setShowSummaryCard] = useState(false)
-
+    //vehicleid
     const handleSearchPlate = () => setShowSummaryCard(true)
+
 
     const onClear = () => setShowSummaryCard(false)
 

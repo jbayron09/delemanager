@@ -10,7 +10,7 @@ export default function DropDown({setShowProfile, dropDownRef, className}) {
         listening,
         setListening,
         dropDownRef,
-        setShowProfile,
+        setShowProfile
     ));
 
     return (
@@ -19,10 +19,14 @@ export default function DropDown({setShowProfile, dropDownRef, className}) {
                 <p className="text-base leading-6 font-semibold text-gray-700">El Byron Hernández</p>
                 <p className="text-sm leading-5 font-normal text-gray-500">byroneldelamoto@gmail.com</p>
             </div>
-            <div>
-                <p className="text-sm font-normal text-gray-700 px-5 pt-4 pb-2">Mi perfil</p>
-                <Link to="/auth/logout">
-                    <p className="text-sm font-normal text-gray-700 px-5 pt-2 pb-4">Salir</p>
+            <div className="w-full">
+                <Link to="/dashboard"
+                      className="block text-sm font-normal text-gray-700 px-5 leading-10">
+                    Mi perfil
+                </Link>
+                <Link to="/auth/logout"
+                      className="block text-sm font-normal text-gray-700 px-5 leading-10">
+                    Salir
                 </Link>
             </div>
         </div>

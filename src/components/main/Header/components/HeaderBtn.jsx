@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export default function HeaderBtn({onClick, children}){
+export default function HeaderBtn({children, onClick}){
     return (
         <button className="p-5 text-gray-400" onClick={onClick}>
             {children}
@@ -9,6 +9,6 @@ export default function HeaderBtn({onClick, children}){
 }
 
 HeaderBtn.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    onClick: PropTypes.func
 }

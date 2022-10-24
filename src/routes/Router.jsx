@@ -2,6 +2,7 @@ import useAuth from "hooks/auth/useAuth";
 import {Route, Routes} from "react-router-dom";
 import Redirect from "routes/Redirect";
 import Login from "routes/Login";
+import Logout from "routes/Logout";
 import Dashboard from "routes/Dashboard/Dashboard";
 
 export default function Router() {
@@ -18,6 +19,7 @@ export default function Router() {
                     :
                     <>
                         <Route path="/dashboard" element={<Dashboard/>}/>
+                        <Route path="/auth/logout" element={<Logout/>}></Route>
                     </>
             }
             <Route path="*" element={<Redirect/>}/>

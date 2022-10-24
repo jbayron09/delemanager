@@ -5,7 +5,6 @@ import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
 import {useMutation} from "@apollo/client";
 import CreateVehicleMutation from "mutations/CreateVehicleMutation";
-import CreateCheckInMutation from "mutations/CreateCheckInMutation";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
@@ -44,19 +43,27 @@ export default function SearchPlateForm({onSearch, onClear}) {
     // });
 
 
-    const [createCheckIn] = useMutation(CreateCheckInMutation)
+    // const [createCheckIn] = useMutation(CreateCheckInMutation)
+
+    // const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
+    //     onCompleted: (data) => {
+    //         createCheckIn({
+    //             variables: {
+    //                 data: {
+    //                     parking_lot: 88,
+    //                     vehicle: data.createVehicle.data.id
+    //                 }
+    //             }
+    //         })
+    //         onSearch(inputValue)
+    //         setShowButtonDelete(true)
+    //     }
+    // });
 
     const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
         onCompleted: (data) => {
-            createCheckIn({
-                variables: {
-                    data: {
-                        parking_lot: 88,
-                        vehicle: data.createVehicle.data.id
-                    }
-                }
-            })
-
+            onSearch(data.createVehicle.data.id)
+            setShowButtonDelete(true)
         }
     });
 
@@ -71,8 +78,8 @@ export default function SearchPlateForm({onSearch, onClear}) {
                     }
                 }
             })
-            onSearch(inputValue)
-            setShowButtonDelete(true)
+            // onSearch(inputValue)
+            // setShowButtonDelete(true)
 
         } else {
             setShowButtonDelete(false)
@@ -103,7 +110,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
                     {
                         loading
                             ?
-                            "cargando..."
+                            "Cargando..."
                             :
                             "Buscar"
                     }

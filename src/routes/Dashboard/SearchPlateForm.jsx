@@ -11,7 +11,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
     const [showDeleteBtn, setShowDeleteBtn] = useState(false)
-    const [showMessage, setShowMessage] = useState(false)
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -32,7 +32,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
 
     const onDeletePlate = () => {
         setInputValue('')
-        setShowMessage(false)
+        setShowErrorMessage(false)
         setShowDeleteBtn(false)
         onClear()
     }
@@ -66,7 +66,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
         const regex = /^[A-Z]{3}[0-9]{2,3}([A-Z]{1})?$/
         const cleanedValue = inputValue.replace(' ', '')
         if (cleanedValue.match(regex)) {
-            setShowMessage(false)
+            setShowErrorMessage(false)
             await searchVehicle({
                 variables: {
                     plate: cleanedValue
@@ -74,7 +74,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
             })
         } else {
             setShowDeleteBtn(false)
-            setShowMessage(true)
+            setShowErrorMessage(true)
             onClear()
         }
     }
@@ -91,7 +91,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onKeyDown={handleKeyDown}/>
 
             {showDeleteBtn && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
-            {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
+            {showErrorMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
             {errorQuery && <ErrorMessage message={"¡Error de envío! " + errorQuery.message} className="mb-3"/>}
 

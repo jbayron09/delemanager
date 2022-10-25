@@ -27,6 +27,6 @@ export default function CounterTime({datetime}) {
 }
 
 CounterTime.propTypes = {
-    datetime: PropTypes.string
+    datetime: PropTypes.string.isRequired
 }
 

@@ -11,7 +11,6 @@ import CreateCheckInMutation from "mutations/CreateCheckInMutation";
 
 export default function SummaryCard({vehicleId}) {
     const [showModal, setShowModal] = useState(false)
-    const [counterIsActive, setCounterIsActive] = useState(false)
     const [dateTime, setDateTime] = useState(null)
 
     const closeModal = () => setShowModal(false)
@@ -23,7 +22,7 @@ export default function SummaryCard({vehicleId}) {
     })
 
     const handleClick = () => {
-        if (counterIsActive) {
+        if (dateTime) {
             const now = DateTime.now()
             const checkInDate = DateTime.fromISO(dateTime)
             const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
@@ -38,7 +37,6 @@ export default function SummaryCard({vehicleId}) {
                     }
                 }
             })
-            setCounterIsActive(true)
         }
     }
 
@@ -49,7 +47,7 @@ export default function SummaryCard({vehicleId}) {
                     icon={BiTime}
                     className="mb-2">
                     {
-                        !counterIsActive
+                        !dateTime
                             ?
                             "Aún no está contando el tiempo"
                             :
@@ -65,7 +63,7 @@ export default function SummaryCard({vehicleId}) {
                     fullWidth
                     onClick={handleClick}>
                     {
-                        counterIsActive
+                        dateTime
                             ?
                             "Imprimir factura"
                             :
@@ -80,5 +78,5 @@ export default function SummaryCard({vehicleId}) {
 }
 
 SummaryCard.propTypes = {
-    vehicleId: PropTypes.string,
+    vehicleId: PropTypes.string.isRequired,
 }

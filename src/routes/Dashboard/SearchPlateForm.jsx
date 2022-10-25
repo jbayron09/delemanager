@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useLazyQuery, useMutation} from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
@@ -13,29 +13,13 @@ export default function SearchPlateForm({onSearch, onClear}) {
     const [showDeleteBtn, setShowDeleteBtn] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
 
-    const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
-
-    const handleChange = ({target: {value}}) => {
-        if (value.length <= 7) {
-            if (isDeleting && value.length === 3) {
-                setInputValue(value.substring(0, 2))
-                setIsDeleting(false)
-            } else {
-                setIsDeleting(false)
-                let vehiclePlate = value.toUpperCase()
-                if (value.length === 3)
-                    vehiclePlate = vehiclePlate + ' '
-                setInputValue(vehiclePlate)
-            }
+    useEffect(() => {
+        if (showDeleteBtn && inputValue.length < 7) {
+            setShowErrorMessage(false)
+            setShowDeleteBtn(false)
+            onClear()
         }
-    }
-
-    const onDeletePlate = () => {
-        setInputValue('')
-        setShowErrorMessage(false)
-        setShowDeleteBtn(false)
-        onClear()
-    }
+    }, [inputValue, showDeleteBtn])
 
     const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
         onCompleted: (data) => {
@@ -61,6 +45,32 @@ export default function SearchPlateForm({onSearch, onClear}) {
         }
     })
 
+    const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
+
+    const handleChange = ({target: {value}}) => {
+        if (value.length <= 7) {
+            if (isDeleting && value.length === 3) {
+                setInputValue(value.substring(0, 2))
+                setIsDeleting(false)
+            } else {
+                setIsDeleting(false)
+                let vehiclePlate = value.toUpperCase()
+                if (value.length === 3) {
+                    vehiclePlate = vehiclePlate + ' '
+                }
+                setInputValue(vehiclePlate)
+            }
+        }
+
+    }
+    const onDeletePlate = () => {
+        setInputValue('')
+        setShowErrorMessage(false)
+        setShowDeleteBtn(false)
+        onClear()
+
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         const regex = /^[A-Z]{3}[0-9]{2,3}([A-Z]{1})?$/
@@ -77,6 +87,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
             setShowErrorMessage(true)
             onClear()
         }
+
     }
 
     return (

@@ -1,15 +1,15 @@
 import {useState} from "react";
+import {useMutation} from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
-import {useMutation} from "@apollo/client";
 import CreateVehicleMutation from "mutations/CreateVehicleMutation";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
-    const [showButtonDelete, setShowButtonDelete] = useState(false)
+    const [showDeleteBtn, setShowDeleteBtn] = useState(false)
     const [showMessage, setShowMessage] = useState(false)
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
@@ -32,11 +32,16 @@ export default function SearchPlateForm({onSearch, onClear}) {
     const onDeletePlate = () => {
         setInputValue('')
         setShowMessage(false)
-        setShowButtonDelete(false)
+        setShowDeleteBtn(false)
         onClear()
     }
 
-    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation);
+    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
+        onCompleted: (data) => {
+            onSearch(data.createVehicle.data.id)
+            setShowDeleteBtn(true)
+        }
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -49,11 +54,8 @@ export default function SearchPlateForm({onSearch, onClear}) {
                     }
                 }
             })
-            onSearch(inputValue)
-            setShowButtonDelete(true)
-
         } else {
-            setShowButtonDelete(false)
+            setShowDeleteBtn(false)
             setShowMessage(true)
             onClear()
         }
@@ -70,18 +72,18 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}/>
 
-            {showButtonDelete && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
+            {showDeleteBtn && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
             {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
 
-            {!showButtonDelete &&
+            {!showDeleteBtn &&
                 <Button
                     type="submit"
                     fullWidth>
                     {
                         loading
                             ?
-                            "cargando..."
+                            "Cargando..."
                             :
                             "Buscar"
                     }

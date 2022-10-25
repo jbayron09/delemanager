@@ -3,12 +3,12 @@ import Header from "components/main/Header";
 import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 import SummaryCard from "routes/Dashboard/SummaryCard";
 
-export default function Dashboard(){
-    const [showSummaryCard, setShowSummaryCard] = useState(false)
+export default function Dashboard() {
+    const [vehicleId, setVehicleId] = useState(null)
 
-    const handleSearchPlate = () => setShowSummaryCard(true)
+    const handleSearchPlate = vehicleId => setVehicleId(vehicleId)
 
-    const onClear = () => setShowSummaryCard(false)
+    const onClear = () => setVehicleId(null)
 
     return (
         <>
@@ -21,7 +21,7 @@ export default function Dashboard(){
                         onSearch={handleSearchPlate}
                     />
                 </div>
-                {showSummaryCard && <SummaryCard />}
+                {vehicleId && <SummaryCard vehicleId={vehicleId}/>}
             </div>
         </>
     )

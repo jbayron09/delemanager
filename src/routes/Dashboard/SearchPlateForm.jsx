@@ -1,16 +1,17 @@
 import {useState} from "react";
-import {useMutation} from "@apollo/client";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
 import CreateVehicleMutation from "mutations/CreateVehicleMutation";
+import VehiclesByPlateQuery from "queries/VehiclesByPlateQuery";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
     const [showDeleteBtn, setShowDeleteBtn] = useState(false)
-    const [showMessage, setShowMessage] = useState(false)
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -31,7 +32,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
 
     const onDeletePlate = () => {
         setInputValue('')
-        setShowMessage(false)
+        setShowErrorMessage(false)
         setShowDeleteBtn(false)
         onClear()
     }
@@ -43,20 +44,37 @@ export default function SearchPlateForm({onSearch, onClear}) {
         }
     });
 
+    const [searchVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
+        onCompleted: (data) => {
+            if (data.vehicles.data.length > 0) {
+                onSearch(data.vehicles.data[0].id)
+                setShowDeleteBtn(true)
+            } else {
+                createVehicle({
+                    variables: {
+                        data: {
+                            plate: inputValue.split(/\s+/).join('')
+                        }
+                    }
+                })
+            }
+        }
+    })
+
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (inputValue.length === 7) {
-            setShowMessage(false)
-            await createVehicle({
+        const regex = /^[A-Z]{3}[0-9]{2,3}([A-Z]{1})?$/
+        const cleanedValue = inputValue.replace(' ', '')
+        if (cleanedValue.match(regex)) {
+            setShowErrorMessage(false)
+            await searchVehicle({
                 variables: {
-                    data: {
-                        plate: inputValue.split(/\s+/).join('')
-                    }
+                    plate: cleanedValue
                 }
             })
         } else {
             setShowDeleteBtn(false)
-            setShowMessage(true)
+            setShowErrorMessage(true)
             onClear()
         }
     }
@@ -73,15 +91,16 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onKeyDown={handleKeyDown}/>
 
             {showDeleteBtn && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
-            {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
+            {showErrorMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
+            {errorQuery && <ErrorMessage message={"¡Error de envío! " + errorQuery.message} className="mb-3"/>}
 
             {!showDeleteBtn &&
                 <Button
                     type="submit"
                     fullWidth>
                     {
-                        loading
+                        loading || loadingQuery
                             ?
                             "Cargando..."
                             :

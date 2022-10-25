@@ -2,6 +2,7 @@ import {useState} from "react";
 import Header from "components/main/Header";
 import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 import SummaryCard from "routes/Dashboard/SummaryCard";
+import RecentVehiclesCard from "routes/Dashboard/RecentVehiclesCard";
 
 export default function Dashboard(){
     const [showSummaryCard, setShowSummaryCard] = useState(false)
@@ -22,6 +23,7 @@ export default function Dashboard(){
                     />
                 </div>
                 {showSummaryCard && <SummaryCard />}
+                <RecentVehiclesCard/>
             </div>
         </>
     )

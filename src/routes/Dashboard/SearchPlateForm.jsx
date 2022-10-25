@@ -41,9 +41,6 @@ export default function SearchPlateForm({onSearch, onClear}) {
         onCompleted: (data) => {
             onSearch(data.createVehicle.data.id)
             setShowDeleteBtn(true)
-        },
-        onError(error){
-            console.log(error);
         }
     });
 
@@ -61,9 +58,6 @@ export default function SearchPlateForm({onSearch, onClear}) {
                     }
                 })
             }
-        },
-        onError(error){
-            console.log(error);
         }
     })
 

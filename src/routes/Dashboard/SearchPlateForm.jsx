@@ -15,9 +15,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
 
     useEffect(() => {
         if (showDeleteBtn && inputValue.length < 7) {
-            setShowErrorMessage(false)
-            setShowDeleteBtn(false)
-            onClear()
+            resetForm()
         }
     }, [inputValue, showDeleteBtn])
 
@@ -28,7 +26,14 @@ export default function SearchPlateForm({onSearch, onClear}) {
         }
     });
 
+    const resetForm = () => {
+        setShowErrorMessage(false)
+        setShowDeleteBtn(false)
+        onClear()
+    }
+
     const [searchVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
+        fetchPolicy: "network-only",
         onCompleted: (data) => {
             if (data.vehicles.data.length > 0) {
                 onSearch(data.vehicles.data[0].id)
@@ -65,10 +70,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
     }
     const onDeletePlate = () => {
         setInputValue('')
-        setShowErrorMessage(false)
-        setShowDeleteBtn(false)
-        onClear()
-
+        resetForm()
     }
 
     const handleSubmit = async (e) => {

@@ -3,11 +3,10 @@ import Header from "components/main/Header";
 import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
 import SummaryCard from "routes/Dashboard/SummaryCard";
 
-export default function Dashboard(){
+export default function Dashboard() {
     const [showSummaryCard, setShowSummaryCard] = useState(null)
 
     const handleSearchPlate = (vehicleId) => setShowSummaryCard(vehicleId)
-
 
     const onClear = () => setShowSummaryCard(false)
 

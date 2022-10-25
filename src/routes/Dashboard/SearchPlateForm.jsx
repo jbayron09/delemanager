@@ -1,9 +1,9 @@
 import {useState} from "react";
+import {useMutation} from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
-import {useMutation} from "@apollo/client";
 import CreateVehicleMutation from "mutations/CreateVehicleMutation";
 
 export default function SearchPlateForm({onSearch, onClear}) {
@@ -35,30 +35,6 @@ export default function SearchPlateForm({onSearch, onClear}) {
         setShowButtonDelete(false)
         onClear()
     }
-
-    // const [createCheckIn, {errorCheckIn}] = useMutation(CreateCheckInMutation)
-
-    // const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
-    //     onCompleted: data => console.log(data.createVehicle.data.id)
-    // });
-
-
-    // const [createCheckIn] = useMutation(CreateCheckInMutation)
-
-    // const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
-    //     onCompleted: (data) => {
-    //         createCheckIn({
-    //             variables: {
-    //                 data: {
-    //                     parking_lot: 88,
-    //                     vehicle: data.createVehicle.data.id
-    //                 }
-    //             }
-    //         })
-    //         onSearch(inputValue)
-    //         setShowButtonDelete(true)
-    //     }
-    // });
 
     const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
         onCompleted: (data) => {

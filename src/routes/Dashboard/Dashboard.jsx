@@ -8,7 +8,7 @@ export default function Dashboard() {
 
     const handleSearchPlate = vehicleId => setVehicleId(vehicleId)
 
-    const onClear = () => setVehicleId(false)
+    const onClear = () => setVehicleId(null)
 
     return (
         <>

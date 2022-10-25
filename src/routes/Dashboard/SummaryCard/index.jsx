@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import {useState} from "react";
 import {BiTime, BiDollarCircle} from "react-icons/bi";
 import {DateTime} from "luxon";
@@ -6,7 +7,6 @@ import Button from "components/main/Button";
 import SummaryCardSection from "routes/Dashboard/SummaryCard/components/SummaryCardSection";
 import CounterTime from "routes/Dashboard/SummaryCard/components/CounterTime";
 import DeleModal from "components/modals/DeleModal";
-import PropTypes from "prop-types";
 import CreateCheckInMutation from "mutations/CreateCheckInMutation";
 
 export default function SummaryCard({vehicleId}) {

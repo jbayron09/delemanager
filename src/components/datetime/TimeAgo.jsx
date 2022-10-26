@@ -1,6 +1,16 @@
 import {DateTime} from "luxon";
+import {useCallback, useEffect, useState} from "react";
 
-export default function TimeAgo({now, datetime}){
+export default function TimeAgo({datetime}){
+    const [now, setNow] = useState(DateTime.now())
+    const updateNow = useCallback(() => setNow(DateTime.now()))
+
+    useEffect(() => {
+        const timeout = setTimeout(updateNow, 20000)
+
+        return () => clearTimeout(timeout)
+    }, [updateNow])
+
     const {days, hours, minutes, seconds} = now.diff(
         DateTime.fromISO(datetime), ["days", "hours","minutes","seconds"]
     ).toObject()

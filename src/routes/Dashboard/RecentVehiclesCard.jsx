@@ -1,20 +1,9 @@
 import {useQuery} from "@apollo/client";
-import {DateTime} from "luxon";
 import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
-import {useCallback, useEffect, useState} from "react";
 import ServerError from "components/misc/ServerError";
 import TimeAgo from "components/datetime/TimeAgo";
 
 export default function RecentVehiclesCard(){
-    const [now, setNow] = useState(DateTime.now())
-    const updateNow = useCallback(() => setNow(DateTime.now()))
-
-    useEffect(() => {
-        const timeout = setTimeout(updateNow, 20000)
-
-        return () => clearTimeout(timeout)
-    }, [updateNow])
-
     const {loading, error, data} = useQuery(CheckedInVehiclesQuery)
     if (loading) return <p>Cargando...</p>;
     if (error) return <ServerError/>;
@@ -30,7 +19,7 @@ export default function RecentVehiclesCard(){
                                 {vehicle.attributes.vehicle.data.attributes.plate}
                             </p>
                             <p  className="text-sm text-gray-400 font-normal">
-                                <TimeAgo now={now} datetime={vehicle.attributes.createdAt}/>
+                                <TimeAgo datetime={vehicle.attributes.createdAt}/>
                             </p>
                         </div>
                     ))

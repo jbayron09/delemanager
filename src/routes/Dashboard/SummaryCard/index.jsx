@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import {useState} from "react";
-import {BiTime, BiDollarCircle} from "react-icons/bi";
+import {BiDollarCircle, BiTime} from "react-icons/bi";
 import {DateTime} from "luxon";
 import {useMutation} from "@apollo/client";
 import Button from "components/main/Button";
@@ -8,7 +8,6 @@ import SummaryCardSection from "routes/Dashboard/SummaryCard/components/SummaryC
 import CounterTime from "routes/Dashboard/SummaryCard/components/CounterTime";
 import DeleModal from "components/modals/DeleModal";
 import CreateCheckInMutation from "mutations/CreateCheckInMutation";
-import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
 
 export default function SummaryCard({vehicleId}) {
     const [showModal, setShowModal] = useState(false)
@@ -17,10 +16,6 @@ export default function SummaryCard({vehicleId}) {
     const closeModal = () => setShowModal(false)
 
     const [createCheckIn] = useMutation(CreateCheckInMutation, {
-        refetchQueries: [
-            {query: CheckedInVehiclesQuery},
-            'CheckIns'
-        ],
         onCompleted: (data) => {
             setDateTime(data.createCheckIn.data.attributes.createdAt)
         }

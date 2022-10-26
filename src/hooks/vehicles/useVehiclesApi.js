@@ -41,7 +41,7 @@ export default function useVehiclesApi() {
     return [
         getOrCreateVehicle,
         {
-            loading: loadingQuery ?? loadingMutation,
+            loading: loadingQuery || loadingMutation,
             error: errorQuery ?? errorMutation,
             vehicleId,
             reset

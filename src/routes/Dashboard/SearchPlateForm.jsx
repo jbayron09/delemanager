@@ -1,11 +1,9 @@
 import {useEffect, useState} from "react";
-import {useLazyQuery, useMutation} from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
-import CreateVehicleMutation from "mutations/CreateVehicleMutation";
-import VehiclesByPlateQuery from "queries/VehiclesByPlateQuery";
+import useVehiclesApi from "hooks/vehicles/useVehiclesApi";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
@@ -19,36 +17,17 @@ export default function SearchPlateForm({onSearch, onClear}) {
         }
     }, [inputValue, showDeleteBtn])
 
-    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
-        onCompleted: (data) => {
-            onSearch(data.createVehicle.data.id)
-            setShowDeleteBtn(true)
-        }
-    });
+    const [getOrCreateVehicle, {error, loading, errorQuery, loadingQuery}] = useVehiclesApi({
+        onSearch,
+        setShowDeleteBtn,
+        inputValue
+    })
 
     const resetForm = () => {
         setShowErrorMessage(false)
         setShowDeleteBtn(false)
         onClear()
     }
-
-    const [searchVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => {
-            if (data.vehicles.data.length > 0) {
-                onSearch(data.vehicles.data[0].id)
-                setShowDeleteBtn(true)
-            } else {
-                createVehicle({
-                    variables: {
-                        data: {
-                            plate: inputValue.split(/\s+/).join('')
-                        }
-                    }
-                })
-            }
-        }
-    })
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -79,7 +58,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
         const cleanedValue = inputValue.replace(' ', '')
         if (cleanedValue.match(regex)) {
             setShowErrorMessage(false)
-            await searchVehicle({
+            await getOrCreateVehicle({
                 variables: {
                     plate: cleanedValue
                 }
@@ -89,7 +68,6 @@ export default function SearchPlateForm({onSearch, onClear}) {
             setShowErrorMessage(true)
             onClear()
         }
-
     }
 
     return (

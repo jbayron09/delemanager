@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useCallback, useEffect, useState } from "react"
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
@@ -8,26 +8,25 @@ import useVehiclesApi from "hooks/vehicles/useVehiclesApi";
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
-    const [showDeleteBtn, setShowDeleteBtn] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [getOrCreateVehicle, {loading, error, vehicleId, reset}] = useVehiclesApi()
+
+    const resetForm = useCallback(() => {
+      reset()
+      setShowErrorMessage(false)
+      onClear()
+    }, [reset, setShowErrorMessage, onClear])
 
     useEffect(() => {
-        if (showDeleteBtn && inputValue.length < 7) {
+        if(vehicleId)
+            onSearch(vehicleId)
+    }, [vehicleId, onSearch])
+
+    useEffect(() => {
+        if (vehicleId && inputValue.length < 7) {
             resetForm()
         }
-    }, [inputValue, showDeleteBtn])
-
-    const [getOrCreateVehicle, {error, loading, errorQuery, loadingQuery}] = useVehiclesApi({
-        onSearch,
-        setShowDeleteBtn,
-        inputValue
-    })
-
-    const resetForm = () => {
-        setShowErrorMessage(false)
-        setShowDeleteBtn(false)
-        onClear()
-    }
+    }, [inputValue, vehicleId, resetForm])
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -58,13 +57,8 @@ export default function SearchPlateForm({onSearch, onClear}) {
         const cleanedValue = inputValue.replace(' ', '')
         if (cleanedValue.match(regex)) {
             setShowErrorMessage(false)
-            await getOrCreateVehicle({
-                variables: {
-                    plate: cleanedValue
-                }
-            })
+            await getOrCreateVehicle(cleanedValue)
         } else {
-            setShowDeleteBtn(false)
             setShowErrorMessage(true)
             onClear()
         }
@@ -81,17 +75,16 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}/>
 
-            {showDeleteBtn && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
+            {vehicleId && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
             {showErrorMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
-            {errorQuery && <ErrorMessage message={"¡Error de envío! " + errorQuery.message} className="mb-3"/>}
 
-            {!showDeleteBtn &&
+            {!vehicleId &&
                 <Button
                     type="submit"
                     fullWidth>
                     {
-                        loading || loadingQuery
+                        loading
                             ?
                             "Cargando..."
                             :

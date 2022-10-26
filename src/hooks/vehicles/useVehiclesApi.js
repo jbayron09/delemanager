@@ -1,41 +1,50 @@
 import {useLazyQuery, useMutation} from "@apollo/client";
 import CreateVehicleMutation from "mutations/CreateVehicleMutation";
 import VehiclesByPlateQuery from "queries/VehiclesByPlateQuery";
+import { useState } from "react"
 
-export default function useVehiclesApi({onSearch, setShowDeleteBtn, inputValue}) {
-
-    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
+export default function useVehiclesApi() {
+    const [vehicleId, setVehicleId] = useState(undefined)
+    const [createVehicle, {loading: loadingMutation, error: errorMutation}] = useMutation(CreateVehicleMutation, {
         onCompleted: (data) => {
-            onSearch(data.createVehicle.data.id)
-            setShowDeleteBtn(true)
+            setVehicleId(data.createVehicle.data.id)
         }
     });
 
-    const [getOrCreateVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => {
-            if (data.vehicles.data.length > 0) {
-                onSearch(data.vehicles.data[0].id)
-                setShowDeleteBtn(true)
-            } else {
-                createVehicle({
-                    variables: {
-                        data: {
-                            plate: inputValue.replace(' ', '')
-                        }
-                    }
-                })
-            }
-        }
+    const [searchVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
+        fetchPolicy: "network-only"
     })
+
+    const getOrCreateVehicle = plate => {
+        searchVehicle({
+            variables: {
+                plate
+            },
+            onCompleted: (data) => {
+                if (data.vehicles.data.length > 0) {
+                    setVehicleId(data.vehicles.data[0].id)
+                } else {
+                    createVehicle({
+                        variables: {
+                            data: {
+                                plate
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+    const reset = () => setVehicleId(undefined)
     
     return [
         getOrCreateVehicle,
         {
-            loading,
-            error,
-            loadingQuery,
-            errorQuery
+            loading: loadingQuery ?? loadingMutation,
+            error: errorQuery ?? errorMutation,
+            vehicleId,
+            reset
         }
     ]
 }

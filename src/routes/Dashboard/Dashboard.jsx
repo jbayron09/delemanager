@@ -23,6 +23,7 @@ export default function Dashboard(){
                     />
                 </div>
                 {showSummaryCard && <SummaryCard />}
+                <hr className="w-full  border-gray-100 my-6"/>
                 <RecentVehiclesCard/>
             </div>
         </>

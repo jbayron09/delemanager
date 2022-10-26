@@ -3,7 +3,7 @@ import {DateTime} from "luxon";
 import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
 import {useCallback, useEffect, useState} from "react";
 import ServerError from "components/misc/ServerError";
-import calculateDiff from "components/datetime/TimeAgo";
+import TimeAgo from "components/datetime/TimeAgo";
 
 export default function RecentVehiclesCard(){
     const [now, setNow] = useState(DateTime.now())
@@ -29,11 +29,7 @@ export default function RecentVehiclesCard(){
                             <p className="text-base text-gray-700 font-bold">
                                 {vehicle.attributes.vehicle.data.attributes.plate}
                             </p>
-                            <p className="text-sm text-gray-400 font-normal">
-                                {
-                                    calculateDiff(now, vehicle.attributes.createdAt)
-                                }
-                            </p>
+                            <TimeAgo now={now} datetime={vehicle.attributes.createdAt}/>
                         </div>
                     ))
                 }

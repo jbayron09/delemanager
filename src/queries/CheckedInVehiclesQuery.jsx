@@ -18,7 +18,6 @@ const CheckedInVehiclesQuery = gql`
         data {
             id
             attributes {
-                checked_out
                 createdAt
                 vehicle {
                     data {

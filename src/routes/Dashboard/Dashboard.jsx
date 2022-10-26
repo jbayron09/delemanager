@@ -25,7 +25,7 @@ export default function Dashboard() {
                     </div>
                     {vehicleId && <SummaryCard vehicleId={vehicleId}/>}
                 </div>
-                <hr className="w-full  border-gray-100 my-6"/>
+                <hr className="w-full border-gray-100 my-6"/>
                 <div className="px-4">
                     <RecentVehiclesCard/>
                 </div>

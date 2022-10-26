@@ -30,9 +30,9 @@ export default function RecentVehiclesCard(){
                                 {vehicle.attributes.vehicle.data.attributes.plate}
                             </p>
                             <p className="text-sm text-gray-400 font-normal">
-                                {`
-                                    ${calculateDiff(now, vehicle.attributes.createdAt)}
-                                `}
+                                {
+                                    calculateDiff(now, vehicle.attributes.createdAt)
+                                }
                             </p>
                         </div>
                     ))

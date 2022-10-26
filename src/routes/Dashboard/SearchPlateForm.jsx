@@ -1,16 +1,54 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useLazyQuery, useMutation} from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
-import {useMutation} from "@apollo/client";
 import CreateVehicleMutation from "mutations/CreateVehicleMutation";
+import VehiclesByPlateQuery from "queries/VehiclesByPlateQuery";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
-    const [showButtonDelete, setShowButtonDelete] = useState(false)
-    const [showMessage, setShowMessage] = useState(false)
+    const [showDeleteBtn, setShowDeleteBtn] = useState(false)
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
+
+    useEffect(() => {
+        if (showDeleteBtn && inputValue.length < 7) {
+            resetForm()
+        }
+    }, [inputValue, showDeleteBtn])
+
+    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
+        onCompleted: (data) => {
+            onSearch(data.createVehicle.data.id)
+            setShowDeleteBtn(true)
+        }
+    });
+
+    const resetForm = () => {
+        setShowErrorMessage(false)
+        setShowDeleteBtn(false)
+        onClear()
+    }
+
+    const [searchVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+            if (data.vehicles.data.length > 0) {
+                onSearch(data.vehicles.data[0].id)
+                setShowDeleteBtn(true)
+            } else {
+                createVehicle({
+                    variables: {
+                        data: {
+                            plate: inputValue.split(/\s+/).join('')
+                        }
+                    }
+                })
+            }
+        }
+    })
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -22,41 +60,36 @@ export default function SearchPlateForm({onSearch, onClear}) {
             } else {
                 setIsDeleting(false)
                 let vehiclePlate = value.toUpperCase()
-                if (value.length === 3)
+                if (value.length === 3) {
                     vehiclePlate = vehiclePlate + ' '
+                }
                 setInputValue(vehiclePlate)
             }
         }
-    }
 
+    }
     const onDeletePlate = () => {
         setInputValue('')
-        setShowMessage(false)
-        setShowButtonDelete(false)
-        onClear()
+        resetForm()
     }
-
-    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (inputValue.length === 7) {
-            setShowMessage(false)
-            await createVehicle({
+        const regex = /^[A-Z]{3}[0-9]{2,3}([A-Z]{1})?$/
+        const cleanedValue = inputValue.replace(' ', '')
+        if (cleanedValue.match(regex)) {
+            setShowErrorMessage(false)
+            await searchVehicle({
                 variables: {
-                    data: {
-                        plate: inputValue.split(/\s+/).join('')
-                    }
+                    plate: cleanedValue
                 }
             })
-            onSearch(inputValue)
-            setShowButtonDelete(true)
-
         } else {
-            setShowButtonDelete(false)
-            setShowMessage(true)
+            setShowDeleteBtn(false)
+            setShowErrorMessage(true)
             onClear()
         }
+
     }
 
     return (
@@ -70,18 +103,19 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}/>
 
-            {showButtonDelete && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
-            {showMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
+            {showDeleteBtn && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
+            {showErrorMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
+            {errorQuery && <ErrorMessage message={"¡Error de envío! " + errorQuery.message} className="mb-3"/>}
 
-            {!showButtonDelete &&
+            {!showDeleteBtn &&
                 <Button
                     type="submit"
                     fullWidth>
                     {
-                        loading
+                        loading || loadingQuery
                             ?
-                            "cargando..."
+                            "Cargando..."
                             :
                             "Buscar"
                     }

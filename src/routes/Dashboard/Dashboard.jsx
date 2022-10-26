@@ -5,11 +5,11 @@ import SummaryCard from "routes/Dashboard/SummaryCard";
 import RecentVehiclesCard from "routes/Dashboard/RecentVehiclesCard";
 
 export default function Dashboard(){
-    const [showSummaryCard, setShowSummaryCard] = useState(false)
+    const [vehicleId, setVehicleId] = useState(null)
 
-    const handleSearchPlate = () => setShowSummaryCard(true)
+    const handleSearchPlate = vehicleId => setVehicleId(vehicleId)
 
-    const onClear = () => setShowSummaryCard(false)
+    const onClear = () => setVehicleId(null)
 
     return (
         <>
@@ -22,7 +22,7 @@ export default function Dashboard(){
                         onSearch={handleSearchPlate}
                     />
                 </div>
-                {showSummaryCard && <SummaryCard />}
+                {vehicleId && <SummaryCard vehicleId={vehicleId}/>}
                 <hr className="w-full  border-gray-100 my-6"/>
                 <RecentVehiclesCard/>
             </div>

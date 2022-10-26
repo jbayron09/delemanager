@@ -8,6 +8,7 @@ import SummaryCardSection from "routes/Dashboard/SummaryCard/components/SummaryC
 import CounterTime from "routes/Dashboard/SummaryCard/components/CounterTime";
 import DeleModal from "components/modals/DeleModal";
 import CreateCheckInMutation from "mutations/CreateCheckInMutation";
+import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
 
 export default function SummaryCard({vehicleId}) {
     const [showModal, setShowModal] = useState(false)
@@ -16,6 +17,10 @@ export default function SummaryCard({vehicleId}) {
     const closeModal = () => setShowModal(false)
 
     const [createCheckIn] = useMutation(CreateCheckInMutation, {
+        refetchQueries: [
+            {query: CheckedInVehiclesQuery},
+            'CheckIns'
+        ],
         onCompleted: (data) => {
             setDateTime(data.createCheckIn.data.attributes.createdAt)
         }

@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-const SearchVehiclesCheckIns = gql`
+const CheckedInVehiclesQuery = gql`
   query CheckIns {
     checkIns (
     pagination: { pageSize: 10 },
@@ -34,4 +34,4 @@ const SearchVehiclesCheckIns = gql`
 }
 `;
 
-export default SearchVehiclesCheckIns
+export default CheckedInVehiclesQuery

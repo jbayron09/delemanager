@@ -1,7 +1,9 @@
 import {useQuery} from "@apollo/client";
 import {DateTime} from "luxon";
-import SearchVehiclesCheckIns from "queries/SearchVehiclesCheckIns";
+import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
 import {useCallback, useEffect, useState} from "react";
+import ServerError from "components/misc/ServerError";
+import calculateDiff from "components/datetime/TimeAgo";
 
 export default function RecentVehiclesCard(){
     const [now, setNow] = useState(DateTime.now())
@@ -11,23 +13,15 @@ export default function RecentVehiclesCard(){
         const timeout = setTimeout(updateNow, 20000)
 
         return () => clearTimeout(timeout)
-    }, [now])
+    }, [updateNow])
 
-    const {loading, error, data} = useQuery(SearchVehiclesCheckIns)
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
-
-    const calculateDiff = (checkInDate) => {
-        const {days, hours, minutes, seconds} = now.diff(DateTime.fromISO(checkInDate), ["days", "hours","minutes","seconds"]).toObject()
-        if(days>0) return `Hace ${Math.ceil(days)} ${days>1 ? "días" : "día"}`
-        if(hours>0) return `Hace ${Math.ceil(hours)} ${hours>1 ? "horas" : "hora"}`
-        if(minutes>0) return `Hace ${Math.ceil(minutes)} ${minutes>1 ? "minutos" : "minuto"}`
-        if(seconds>0) return "hace un momento"
-    }
+    const {loading, error, data} = useQuery(CheckedInVehiclesQuery)
+    if (loading) return <p>Cargando...</p>;
+    if (error) return <ServerError/>;
 
     return (
         <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
-            <p className="bg-gray-100 text-gray-700 text-base font-bold p-4">Vehiculos recientes</p>
+            <p className="bg-gray-100 text-gray-700 text-base font-bold p-4">Vehículos recientes</p>
             <div className="px-4 pb-5">
                 {
                     data.checkIns.data.map(vehicle => (
@@ -37,7 +31,7 @@ export default function RecentVehiclesCard(){
                             </p>
                             <p className="text-sm text-gray-400 font-normal">
                                 {`
-                                    ${calculateDiff(vehicle.attributes.createdAt)}
+                                    ${calculateDiff(now, vehicle.attributes.createdAt)}
                                 `}
                             </p>
                         </div>

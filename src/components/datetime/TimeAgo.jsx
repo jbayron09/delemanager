@@ -16,10 +16,10 @@ export default function TimeAgo({datetime}){
     ).toObject()
 
     const timeAgo =
-        (days>0) ? `Hace ${Math.ceil(days)} ${days > 1 ? "días" : "día"}` :
-        (hours>0) ? `Hace ${Math.ceil(hours)} ${hours>1 ? "horas" : "hora"}` :
-        (minutes>0) ? `Hace ${Math.ceil(minutes)} ${minutes>1 ? "minutos" : "minuto"}` :
-        (seconds>0) && "hace un momento"
+        (days > 0) ? `Hace ${Math.ceil(days)} ${days > 1 ? "días" : "día"}` :
+        (hours > 0) ? `Hace ${Math.ceil(hours)} ${hours>1 ? "horas" : "hora"}` :
+        (minutes > 0) ? `Hace ${Math.ceil(minutes)} ${minutes>1 ? "minutos" : "minuto"}` :
+        (seconds > 0) && "hace un momento"
 
     return <span>{timeAgo}</span>
 }

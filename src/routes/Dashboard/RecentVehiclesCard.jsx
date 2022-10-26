@@ -18,7 +18,7 @@ export default function RecentVehiclesCard(){
                             <p className="text-base text-gray-700 font-bold">
                                 {vehicle.attributes.vehicle.data.attributes.plate}
                             </p>
-                            <p  className="text-sm text-gray-400 font-normal">
+                            <p className="text-sm text-gray-400 font-normal">
                                 <TimeAgo datetime={vehicle.attributes.createdAt}/>
                             </p>
                         </div>

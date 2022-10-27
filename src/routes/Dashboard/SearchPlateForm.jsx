@@ -1,54 +1,32 @@
-import {useEffect, useState} from "react";
-import {useLazyQuery, useMutation} from "@apollo/client";
+import { useCallback, useEffect, useState } from "react"
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
-import CreateVehicleMutation from "mutations/CreateVehicleMutation";
-import VehiclesByPlateQuery from "queries/VehiclesByPlateQuery";
+import useVehiclesApi from "hooks/vehicles/useVehiclesApi";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
-    const [showDeleteBtn, setShowDeleteBtn] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [getOrCreateVehicle, {loading, error, vehicleId, reset}] = useVehiclesApi()
+
+    const resetForm = useCallback(() => {
+      reset()
+      setShowErrorMessage(false)
+      onClear()
+    }, [reset, setShowErrorMessage, onClear])
 
     useEffect(() => {
-        if (showDeleteBtn && inputValue.length < 7) {
+        if(vehicleId)
+            onSearch(vehicleId)
+    }, [vehicleId, onSearch])
+
+    useEffect(() => {
+        if (vehicleId && inputValue.length < 7) {
             resetForm()
         }
-    }, [inputValue, showDeleteBtn])
-
-    const [createVehicle, {loading, error}] = useMutation(CreateVehicleMutation, {
-        onCompleted: (data) => {
-            onSearch(data.createVehicle.data.id)
-            setShowDeleteBtn(true)
-        }
-    });
-
-    const resetForm = () => {
-        setShowErrorMessage(false)
-        setShowDeleteBtn(false)
-        onClear()
-    }
-
-    const [searchVehicle, {loading: loadingQuery, error: errorQuery}] = useLazyQuery(VehiclesByPlateQuery, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => {
-            if (data.vehicles.data.length > 0) {
-                onSearch(data.vehicles.data[0].id)
-                setShowDeleteBtn(true)
-            } else {
-                createVehicle({
-                    variables: {
-                        data: {
-                            plate: inputValue.split(/\s+/).join('')
-                        }
-                    }
-                })
-            }
-        }
-    })
+    }, [inputValue, vehicleId, resetForm])
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -79,17 +57,11 @@ export default function SearchPlateForm({onSearch, onClear}) {
         const cleanedValue = inputValue.replace(' ', '')
         if (cleanedValue.match(regex)) {
             setShowErrorMessage(false)
-            await searchVehicle({
-                variables: {
-                    plate: cleanedValue
-                }
-            })
+            await getOrCreateVehicle(cleanedValue)
         } else {
-            setShowDeleteBtn(false)
             setShowErrorMessage(true)
             onClear()
         }
-
     }
 
     return (
@@ -103,17 +75,16 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}/>
 
-            {showDeleteBtn && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
+            {vehicleId && <PlateDeleteBtn className="absolute -top-3 right-2" onClick={onDeletePlate}/>}
             {showErrorMessage && <ErrorMessage message="Placa incorrecta" className="mb-3"/>}
             {error && <ErrorMessage message={"¡Error de envío! " + error.message} className="mb-3"/>}
-            {errorQuery && <ErrorMessage message={"¡Error de envío! " + errorQuery.message} className="mb-3"/>}
 
-            {!showDeleteBtn &&
+            {!vehicleId &&
                 <Button
                     type="submit"
                     fullWidth>
                     {
-                        loading || loadingQuery
+                        loading
                             ?
                             "Cargando..."
                             :

@@ -4,7 +4,7 @@ import Button from "components/main/Button";
 
 Modal.setAppElement('#root');
 
-export default function DeleModal({isOpen, toggle, modalContent}) {
+export default function DeleModal({modalContent, isOpen, toggle}) {
     return (
         <Modal
             isOpen={isOpen}
@@ -15,7 +15,7 @@ export default function DeleModal({isOpen, toggle, modalContent}) {
             <h2 className="mb-8 text-lg text-gray-800 font-bold">
                 {
                     (modalContent === "invoiceAlert") ? "¿Seguro quieres hacerlo?" :
-                        (modalContent === "invoice") && "Imprimir factura"
+                        "Imprimir factura"
                 }
             </h2>
             <p className="mb-8 text-base text-gray-700 flex flex-col items-center">
@@ -27,7 +27,6 @@ export default function DeleModal({isOpen, toggle, modalContent}) {
                             Por favor confirma que quieres imprimir la factura.
                         </>
                         :
-                        (modalContent === "invoice") &&
                         <>
                             Haz click en el botón a continuación para imprimir la factura.
                             <br/><br/>

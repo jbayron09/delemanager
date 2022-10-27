@@ -44,6 +44,7 @@ export default function SummaryCard({vehicleId}) {
                 invoiceModal()
             }
         } else {
+            setDateTime("")
             createCheckIn({
                 variables: {
                     data: {

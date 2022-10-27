@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 
 export default function CounterSection({value, label, addComma}) {
+    if(value===0 && label==="segundo") return "Iniciando..."
     value = Math.ceil(value)
     if (!value) return null
     return `${value} ${(value > 1) ? label + 's' : label}${addComma ? ', ' : ''}`;

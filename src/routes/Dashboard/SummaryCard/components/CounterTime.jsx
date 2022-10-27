@@ -5,6 +5,9 @@ import PropTypes from "prop-types";
 
 export default function CounterTime({datetime}) {
     const [diff, setDiff] = useState({})
+
+    useEffect(() => setDiff({seconds: 0}), [datetime])
+
     const calculateDiff = useCallback(() => {
         const now = DateTime.now()
         const checkInDate = DateTime.fromISO(datetime)

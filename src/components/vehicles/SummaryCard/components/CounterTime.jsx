@@ -1,6 +1,6 @@
 import {DateTime} from "luxon";
 import {useCallback, useEffect, useState} from "react";
-import CounterSection from "routes/Dashboard/SummaryCard/components/CounterSection";
+import CounterSection from "components/vehicles/SummaryCard/components/CounterSection";
 import PropTypes from "prop-types";
 
 export default function CounterTime({datetime}) {
@@ -9,7 +9,7 @@ export default function CounterTime({datetime}) {
         const now = DateTime.now()
         const checkInDate = DateTime.fromISO(datetime)
         setDiff(now.diff(checkInDate, ["months", "days", "hours", "minutes", "seconds"]).toObject())
-    })
+    }, [datetime])
 
     useEffect(() => {
         const timeout = setTimeout(calculateDiff, 1000)

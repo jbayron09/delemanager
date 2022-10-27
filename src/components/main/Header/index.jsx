@@ -2,7 +2,7 @@ import {BiMenuAltLeft, BiUser} from "react-icons/bi";
 import {useRef, useState} from "react";
 import Logo from "components/main/Logo";
 import HeaderBtn from "components/main/Header/components/HeaderBtn";
-import DropDown from "routes/Dashboard/DropDown";
+import DropDown from "components/main/DropDown";
 
 export default function Header() {
     const dropDownRef = useRef(null)

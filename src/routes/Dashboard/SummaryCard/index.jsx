@@ -12,6 +12,7 @@ import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
 
 export default function SummaryCard({vehicleId}) {
     const [showModal, setShowModal] = useState(false)
+    const [modalContent, setModalContent] = useState("")
     const [dateTime, setDateTime] = useState(null)
 
     const closeModal = () => setShowModal(false)
@@ -26,13 +27,22 @@ export default function SummaryCard({vehicleId}) {
         }
     })
 
+    const invoiceModal = () => {
+        setShowModal(true)
+    }
+
     const handleClick = () => {
         if (dateTime) {
             const now = DateTime.now()
             const checkInDate = DateTime.fromISO(dateTime)
             const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
-            if (minutes < 5)
-                setShowModal(true)
+            if (minutes < 5) {
+                setModalContent("invoiceAlert")
+                invoiceModal()
+            } else {
+                setModalContent("invoice")
+                invoiceModal()
+            }
         } else {
             createCheckIn({
                 variables: {
@@ -76,7 +86,8 @@ export default function SummaryCard({vehicleId}) {
                     }
                 </Button>
                 <DeleModal isOpen={showModal}
-                           toggle={closeModal}/>
+                           toggle={closeModal}
+                           modalContent={modalContent}/>
             </div>
         </div>
     )

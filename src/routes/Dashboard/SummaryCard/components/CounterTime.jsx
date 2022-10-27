@@ -4,7 +4,7 @@ import CounterSection from "routes/Dashboard/SummaryCard/components/CounterSecti
 import PropTypes from "prop-types";
 
 export default function CounterTime({datetime}) {
-    const [diff, setDiff] = useState({})
+    const [diff, setDiff] = useState({seconds: 0})
     const calculateDiff = useCallback(() => {
         const now = DateTime.now()
         const checkInDate = DateTime.fromISO(datetime)
@@ -18,6 +18,7 @@ export default function CounterTime({datetime}) {
     }, [calculateDiff])
 
     return (
+        datetime &&
         <span>
             <CounterSection value={diff.hours} label="hora" addComma/>
             <CounterSection value={diff.minutes} label="minuto" addComma/>

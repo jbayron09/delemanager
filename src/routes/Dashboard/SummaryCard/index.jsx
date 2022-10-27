@@ -34,6 +34,7 @@ export default function SummaryCard({vehicleId}) {
             if (minutes < 5)
                 setShowModal(true)
         } else {
+            setDateTime("")
             createCheckIn({
                 variables: {
                     data: {

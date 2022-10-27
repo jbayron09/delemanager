@@ -26,7 +26,7 @@ export default function DropDown({setShowProfile, dropDownRef, className}) {
             <div className="w-full">
                 {
                     links.map(link =>
-                        <Link to={link.href}
+                        <Link to={link.href} key={link.href}
                               className="block text-sm font-normal text-gray-700 px-5 leading-10">
                             {link.label}
                         </Link>

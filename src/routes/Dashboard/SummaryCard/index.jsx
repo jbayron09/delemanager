@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import {useState} from "react";
-import {BiTime, BiDollarCircle} from "react-icons/bi";
+import {BiDollarCircle, BiTime} from "react-icons/bi";
 import {DateTime} from "luxon";
 import {useMutation} from "@apollo/client";
 import Button from "components/main/Button";

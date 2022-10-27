@@ -1,24 +1,26 @@
-import { useCallback, useEffect, useState } from "react"
+import {useCallback, useEffect, useState} from "react"
 import PropTypes from "prop-types";
 import Button from "components/main/Button";
 import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
 import useVehiclesApi from "hooks/vehicles/useVehiclesApi";
+import {useSearchParams} from "react-router-dom";
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [searchParams] = useSearchParams()
     const [getOrCreateVehicle, {loading, error, vehicleId, reset}] = useVehiclesApi()
 
     const resetForm = useCallback(() => {
-      reset()
-      setShowErrorMessage(false)
-      onClear()
+        reset()
+        setShowErrorMessage(false)
+        onClear()
     }, [reset, setShowErrorMessage, onClear])
 
     useEffect(() => {
-        if(vehicleId)
+        if (vehicleId)
             onSearch(vehicleId)
     }, [vehicleId, onSearch])
 
@@ -27,6 +29,15 @@ export default function SearchPlateForm({onSearch, onClear}) {
             resetForm()
         }
     }, [inputValue, vehicleId, resetForm])
+
+    useEffect(() => {
+        if (searchParams.has('plate')) {
+            const vehiclePlate = searchParams.get('plate')
+            if (vehiclePlate.length === 6) {
+                setInputValue(`${vehiclePlate.substring(0, 3)} ${vehiclePlate.substring(3, 6)}`)
+            }
+        }
+    }, [searchParams])
 
     const handleKeyDown = (e) => e.key === 'Backspace' && setIsDeleting(true)
 
@@ -44,7 +55,6 @@ export default function SearchPlateForm({onSearch, onClear}) {
                 setInputValue(vehiclePlate)
             }
         }
-
     }
     const onDeletePlate = () => {
         setInputValue('')

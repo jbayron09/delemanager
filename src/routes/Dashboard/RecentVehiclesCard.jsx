@@ -1,10 +1,14 @@
+import {useSearchParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
 import ServerError from "components/misc/ServerError";
 import TimeAgo from "components/datetime/TimeAgo";
 
-export default function RecentVehiclesCard(){
+export default function RecentVehiclesCard() {
+    const [, setSearchParams] = useSearchParams()
+
     const {loading, error, data} = useQuery(CheckedInVehiclesQuery)
+
     if (loading) return <p>Cargando...</p>;
     if (error) return <ServerError/>;
 
@@ -14,10 +18,12 @@ export default function RecentVehiclesCard(){
             <div className="px-4 pb-5">
                 {
                     data.checkIns.data.map(vehicle => (
-                        <div className="flex justify-between mt-5" key={Math.random()}>
-                            <p className="text-base text-gray-700 font-bold">
+                        <div className="flex justify-between mt-5" key={vehicle.id}>
+                            <button
+                                onClick={() => setSearchParams({plate: vehicle.attributes.vehicle.data.attributes.plate})}
+                                className="text-base text-gray-700 font-bold">
                                 {vehicle.attributes.vehicle.data.attributes.plate}
-                            </p>
+                            </button>
                             <p className="text-sm text-gray-400 font-normal">
                                 <TimeAgo datetime={vehicle.attributes.createdAt}/>
                             </p>

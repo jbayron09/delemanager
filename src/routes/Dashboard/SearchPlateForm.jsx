@@ -36,6 +36,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
             if (vehiclePlate.length === 6) {
                 setInputValue(`${vehiclePlate.substring(0, 3)} ${vehiclePlate.substring(3, 6)}`)
             }
+            getOrCreateVehicle(vehiclePlate)
         }
     }, [searchParams])
 

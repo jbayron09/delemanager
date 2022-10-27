@@ -9,7 +9,7 @@ export default function CounterTime({datetime}) {
         const now = DateTime.now()
         const checkInDate = DateTime.fromISO(datetime)
         setDiff(now.diff(checkInDate, ["months", "days", "hours", "minutes", "seconds"]).toObject())
-    }, [datetime])
+    })
 
     useEffect(() => {
         const timeout = setTimeout(calculateDiff, 1000)

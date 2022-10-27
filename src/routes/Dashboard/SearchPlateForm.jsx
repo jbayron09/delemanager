@@ -10,12 +10,13 @@ export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
     const [isDeleting, setIsDeleting] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
-    const [searchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const [getOrCreateVehicle, {loading, error, vehicleId, reset}] = useVehiclesApi()
 
     const resetForm = useCallback(() => {
         reset()
         setShowErrorMessage(false)
+        setSearchParams({})
         onClear()
     }, [reset, setShowErrorMessage, onClear])
 
@@ -60,6 +61,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
     const onDeletePlate = () => {
         setInputValue('')
         resetForm()
+        setSearchParams({})
     }
 
     const handleSubmit = async (e) => {

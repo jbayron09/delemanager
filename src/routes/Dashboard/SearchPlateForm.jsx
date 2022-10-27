@@ -5,6 +5,7 @@ import PlateDeleteBtn from "components/main/PlateDeleteBtn";
 import ErrorMessage from "components/forms/ErrorMessage";
 import useVehiclesApi from "hooks/vehicles/useVehiclesApi";
 import {useSearchParams} from "react-router-dom";
+import { formatPlate } from "utils/vehicles/plates"
 
 export default function SearchPlateForm({onSearch, onClear}) {
     const [inputValue, setInputValue] = useState('')
@@ -18,7 +19,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
         setShowErrorMessage(false)
         setSearchParams({})
         onClear()
-    }, [reset, setShowErrorMessage, onClear])
+    }, [reset, setShowErrorMessage, setSearchParams, onClear])
 
     useEffect(() => {
         if (vehicleId)
@@ -35,7 +36,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
         if (searchParams.has('plate')) {
             const vehiclePlate = searchParams.get('plate')
             if (vehiclePlate.length === 6) {
-                setInputValue(`${vehiclePlate.substring(0, 3)} ${vehiclePlate.substring(3, 6)}`)
+                setInputValue(formatPlate(vehiclePlate))
             }
             getOrCreateVehicle(vehiclePlate)
         }
@@ -51,10 +52,7 @@ export default function SearchPlateForm({onSearch, onClear}) {
             } else {
                 setIsDeleting(false)
                 let vehiclePlate = value.toUpperCase()
-                if (value.length === 3) {
-                    vehiclePlate = vehiclePlate + ' '
-                }
-                setInputValue(vehiclePlate)
+                setInputValue(formatPlate(vehiclePlate))
             }
         }
     }

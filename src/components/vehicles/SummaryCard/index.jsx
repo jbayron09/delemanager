@@ -4,14 +4,15 @@ import { BiDollarCircle, BiTime } from "react-icons/bi"
 import { DateTime } from "luxon"
 import { useMutation } from "@apollo/client"
 import Button from "components/main/Button"
-import SummaryCardSection from "routes/Dashboard/SummaryCard/components/SummaryCardSection"
-import CounterTime from "routes/Dashboard/SummaryCard/components/CounterTime"
+import SummaryCardSection from "components/vehicles/SummaryCard/components/SummaryCardSection"
+import CounterTime from "components/vehicles/SummaryCard/components/CounterTime"
 import DeleModal from "components/modals/DeleModal"
 import CreateCheckInMutation from "mutations/CreateCheckInMutation"
 import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery"
 
 export default function SummaryCard({ vehicleId }) {
   const [showModal, setShowModal] = useState(false)
+  const [modalContent, setModalContent] = useState("")
   const [dateTime, setDateTime] = useState(null)
 
   const closeModal = () => setShowModal(false)
@@ -26,15 +27,23 @@ export default function SummaryCard({ vehicleId }) {
     }
   })
 
+  const invoiceModal = () => {
+    setShowModal(true)
+  }
+
   const handleClick = () => {
     if (dateTime) {
       const now = DateTime.now()
       const checkInDate = DateTime.fromISO(dateTime)
       const { minutes } = now.diff(checkInDate, ["minutes"]).toObject()
-      if (minutes < 5)
-        setShowModal(true)
+      if (minutes < 5) {
+        setModalContent("invoiceAlert")
+        invoiceModal()
+      } else {
+        setModalContent("invoice")
+        invoiceModal()
+      }
     } else {
-      setDateTime("")
       createCheckIn({
         variables: {
           data: {
@@ -77,7 +86,8 @@ export default function SummaryCard({ vehicleId }) {
             }
           </Button>
           <DeleModal isOpen={showModal}
-                     toggle={closeModal}/>
+                     toggle={closeModal}
+                     modalContent={modalContent}/>
         </div>
       </div>
   )

@@ -1,7 +1,7 @@
+import PropTypes from "prop-types"
 import { DateTime } from "luxon"
 import { useCallback, useEffect, useState } from "react"
-import CounterSection from "routes/Dashboard/SummaryCard/components/CounterSection"
-import PropTypes from "prop-types"
+import CounterSection from "components/vehicles/SummaryCard/components/CounterSection"
 
 export default function CounterTime({ datetime }) {
   const [diff, setDiff] = useState({})

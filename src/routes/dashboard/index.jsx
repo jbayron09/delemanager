@@ -1,8 +1,8 @@
 import {useState} from "react";
 import Header from "components/main/Header";
-import SearchPlateForm from "routes/Dashboard/SearchPlateForm";
-import SummaryCard from "routes/Dashboard/SummaryCard";
-import RecentVehiclesCard from "routes/Dashboard/RecentVehiclesCard";
+import SearchPlateForm from "components/vehicles/SearchPlateForm";
+import SummaryCard from "components/vehicles/SummaryCard";
+import RecentVehiclesCard from "components/vehicles/RecentVehiclesCard";
 
 export default function Dashboard() {
     const [vehicleId, setVehicleId] = useState(null)

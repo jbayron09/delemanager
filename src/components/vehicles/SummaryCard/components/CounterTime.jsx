@@ -1,6 +1,6 @@
 import {DateTime} from "luxon";
 import {useCallback, useEffect, useState} from "react";
-import CounterSection from "routes/Dashboard/SummaryCard/components/CounterSection";
+import CounterSection from "components/vehicles/SummaryCard/components/CounterSection";
 import PropTypes from "prop-types";
 
 export default function CounterTime({datetime}) {

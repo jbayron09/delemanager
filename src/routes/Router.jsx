@@ -1,9 +1,9 @@
 import useAuth from "hooks/auth/useAuth";
 import {Route, Routes} from "react-router-dom";
 import Redirect from "routes/Redirect";
-import Login from "routes/Login";
-import Logout from "routes/Logout";
-import Dashboard from "routes/Dashboard/Dashboard";
+import Login from "routes/auth/Login";
+import Logout from "routes/auth/Logout";
+import Dashboard from "routes/dashboard";
 
 export default function Router() {
     const {isAuthenticated} = useAuth()

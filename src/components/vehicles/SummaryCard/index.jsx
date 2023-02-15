@@ -1,98 +1,98 @@
-import PropTypes from "prop-types";
-import {useState} from "react";
-import {BiDollarCircle, BiTime} from "react-icons/bi";
-import {DateTime} from "luxon";
-import {useMutation} from "@apollo/client";
-import Button from "components/main/Button";
-import SummaryCardSection from "components/vehicles/SummaryCard/components/SummaryCardSection";
-import CounterTime from "components/vehicles/SummaryCard/components/CounterTime";
-import DeleModal from "components/modals/DeleModal";
-import CreateCheckInMutation from "mutations/CreateCheckInMutation";
-import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery";
+import PropTypes from "prop-types"
+import { useState } from "react"
+import { BiDollarCircle, BiTime } from "react-icons/bi"
+import { DateTime } from "luxon"
+import { useMutation } from "@apollo/client"
+import Button from "components/main/Button"
+import SummaryCardSection from "components/vehicles/SummaryCard/components/SummaryCardSection"
+import CounterTime from "components/vehicles/SummaryCard/components/CounterTime"
+import DeleModal from "components/modals/DeleModal"
+import CreateCheckInMutation from "mutations/CreateCheckInMutation"
+import CheckedInVehiclesQuery from "queries/CheckedInVehiclesQuery"
 
-export default function SummaryCard({vehicleId}) {
-    const [showModal, setShowModal] = useState(false)
-    const [modalContent, setModalContent] = useState("")
-    const [dateTime, setDateTime] = useState(null)
+export default function SummaryCard({ vehicleId }) {
+  const [showModal, setShowModal] = useState(false)
+  const [modalContent, setModalContent] = useState("")
+  const [dateTime, setDateTime] = useState(null)
 
-    const closeModal = () => setShowModal(false)
+  const closeModal = () => setShowModal(false)
 
-    const [createCheckIn] = useMutation(CreateCheckInMutation, {
-        refetchQueries: [
-            {query: CheckedInVehiclesQuery},
-            'CheckIns'
-        ],
-        onCompleted: (data) => {
-            setDateTime(data.createCheckIn.data.attributes.createdAt)
-        }
-    })
-
-    const invoiceModal = () => {
-        setShowModal(true)
+  const [createCheckIn] = useMutation(CreateCheckInMutation, {
+    refetchQueries: [
+      { query: CheckedInVehiclesQuery },
+      'CheckIns'
+    ],
+    onCompleted: (data) => {
+      setDateTime(data.createCheckIn.data.attributes.createdAt)
     }
+  })
 
-    const handleClick = () => {
-        if (dateTime) {
-            const now = DateTime.now()
-            const checkInDate = DateTime.fromISO(dateTime)
-            const {minutes} = now.diff(checkInDate, ["minutes"]).toObject()
-            if (minutes < 5) {
-                setModalContent("invoiceAlert")
-                invoiceModal()
-            } else {
-                setModalContent("invoice")
-                invoiceModal()
+  const invoiceModal = () => {
+    setShowModal(true)
+  }
+
+  const handleClick = () => {
+    if (dateTime) {
+      const now = DateTime.now()
+      const checkInDate = DateTime.fromISO(dateTime)
+      const { minutes } = now.diff(checkInDate, ["minutes"]).toObject()
+      if (minutes < 5) {
+        setModalContent("invoiceAlert")
+        invoiceModal()
+      } else {
+        setModalContent("invoice")
+        invoiceModal()
+      }
+    } else {
+      createCheckIn({
+        variables: {
+          data: {
+            parking_lot: 88,
+            vehicle: vehicleId
+          }
+        }
+      })
+    }
+  }
+
+  return (
+      <div className="bg-white rounded-lg">
+        <div className="p-8">
+          <SummaryCardSection
+              icon={BiTime}
+              className="mb-2">
+            {
+              !dateTime
+                  ?
+                  "Aún no está contando el tiempo"
+                  :
+                  <CounterTime datetime={dateTime}/>
             }
-        } else {
-            createCheckIn({
-                variables: {
-                    data: {
-                        parking_lot: 88,
-                        vehicle: vehicleId
-                    }
-                }
-            })
-        }
-    }
-
-    return (
-        <div className="bg-white rounded-lg">
-            <div className="p-8">
-                <SummaryCardSection
-                    icon={BiTime}
-                    className="mb-2">
-                    {
-                        !dateTime
-                            ?
-                            "Aún no está contando el tiempo"
-                            :
-                            <CounterTime datetime={dateTime}/>
-                    }
-                </SummaryCardSection>
-                <SummaryCardSection icon={BiDollarCircle}>
-                    $0
-                </SummaryCardSection>
-            </div>
-            <div>
-                <Button
-                    fullWidth
-                    onClick={handleClick}>
-                    {
-                        dateTime
-                            ?
-                            "Imprimir factura"
-                            :
-                            "Comenzar conteo"
-                    }
-                </Button>
-                <DeleModal isOpen={showModal}
-                           toggle={closeModal}
-                           modalContent={modalContent}/>
-            </div>
+          </SummaryCardSection>
+          <SummaryCardSection icon={BiDollarCircle}>
+            $0
+          </SummaryCardSection>
         </div>
-    )
+        <div>
+          <Button
+              fullWidth
+              onClick={handleClick}>
+            {
+              dateTime
+                  ?
+                  "Imprimir factura"
+                  :
+                  "Comenzar conteo"
+            }
+          </Button>
+          <DeleModal isOpen={showModal}
+                     toggle={closeModal}
+                     modalContent={modalContent}/>
+        </div>
+      </div>
+  )
 }
 
 SummaryCard.propTypes = {
-    vehicleId: PropTypes.string.isRequired,
+  vehicleId: PropTypes.string.isRequired,
 }
